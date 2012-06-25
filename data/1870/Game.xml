@@ -71,7 +71,9 @@
 	</Component>
 	<Component name="PhaseManager" class="rails.game.PhaseManager">
 		<Phase name="2" realName="1">
-			<Tiles colour="yellow"/>
+			<Tiles colour="yellow">
+                <Lays companyType="Public" colour="yellow" number="2"/>
+			</Tiles>
 			<OperatingRounds number="1"/>
 			<Trains tradingAllowed="yes"/>
 		</Phase>
