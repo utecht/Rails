@@ -10,11 +10,6 @@ import org.apache.log4j.Logger;
 import rails.algorithms.RevenueBonusTemplate;
 import rails.common.LocalText;
 import rails.common.parser.*;
-import rails.game.Stop.Loop;
-import rails.game.Stop.RunThrough;
-import rails.game.Stop.RunTo;
-import rails.game.Stop.Score;
-import rails.game.Stop.Type;
 import rails.game.action.LayTile;
 import rails.game.model.ModelObject;
 import rails.game.move.Moveable;
@@ -121,43 +116,21 @@ StationHolder, TokenHolder {
     /** Any open sides against which track may be laid even at board edges (1825) */
     protected boolean[] openHexSides;
 
-    /** Run-through status of any stops on the hex (whether visible or not).
-     * Indicates whether or not a single train can run through such stops, i.e. both enter and leave it.
-     * Has no meaning if no stops exist on this hex.
-     * <p>Values (see RunThrough below for definitions):
-     * <br>- "yes" (default for all except off-map hexes) means that trains of all companies
-     * may run through this station, unless it is completely filled with foreign base tokens.
-     * <br>- "tokenOnly" means that trains may only run through the station if it contains a base token
-     * of the operating company (applies to the 1830 PRR base).
-     * <br>- "no" (default for off-map hexes) means that no train may run through this hex.
+    /** Access info array with elements:
+     * [0] for per-hex access parameters. Must exist.<br>
+     * [1]... for each stop (station; if any). Will remain null if no stop-specific access values exist.
+     * 
+     * <p>Stop-specific access parameters apply to one specific hex stop only.
+     * Tile station numbers are defined in Tiles.xml as "city1", ... where "1" is the number.
+     * (station numbers always start with 1). Hex stop numbers are initially copied from the
+     * tile station numbers of the preprinted tile on that hex. When upgraded, Rails attempts to transfer
+     * hex stop numbers unchanged from one tile to the next, based upon existing track connections.
+     * However, such attempts will often fail when the number of stations changes during an upgrade.
+     * It is therefore recommended to define access properties per hex stop only for fixed (not upgradeable)
+     * preprinted tiles
+     * <p>NOTE: per-station access parameters can also be defined in TileSet.xml.
      */
-    protected RunThrough runThroughAllowed = null;
-
-    /** Run-to status of any stops on the hex (whether visible or not).
-     * Indicates whether or not a single train can run from or to such stops, i.e. either enter or leave it.
-     * Has no meaning if no stops exist on this hex.
-     * <p>Values (see RunTo below for definitions):
-     * <br>- "yes" (default) means that trains of all companies may run to/from this station.
-     * <br>- "tokenOnly" means that trains may only access the station if it contains a base token
-     * of the operating company. Applies to the 18Scan off-map hexes.
-     * <br>- "no" would mean that the hex is inaccessible (like 1851 Birmingham in the early game),
-     * but this option is not yet useful as there is no provision yet to change this setting
-     * in an undoable way (no state variable).
-     */
-    protected RunTo runToAllowed = null;
-
-    /** Loop: may one train touch this hex twice or more? */
-    protected Loop loopAllowed = null;
-
-    /** Type of any stops on the hex.
-     * Normally the type will be derived from the tile properties.
-     */
-    protected Type stopType = null;
-
-    /**
-     * Score type: do stops on this hex count as major or minor stops with respect to n+m trains?
-     */
-    protected Score scoreType = null;
+    protected Access[] accessInfo;
 
     protected MapManager mapManager = null;
 
@@ -271,59 +244,46 @@ StationHolder, TokenHolder {
         }
 
         // Stop properties
-        Tag accessTag = tag.getChild("Access");
-        if (accessTag != null) {
-            String runThroughString = accessTag.getAttributeAsString("runThrough");
-            if (Util.hasValue(runThroughString)) {
-                try {
-                    runThroughAllowed = RunThrough.valueOf(runThroughString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for MapHex"
-                            +name+" runThrough property: "+runThroughString, e);
-                }
-            }
+        accessInfo = new Access[1];
+        accessInfo[0] = new Access();
 
-            String runToString = accessTag.getAttributeAsString("runTo");
-            if (Util.hasValue(runToString)) {
-                try {
-                    runToAllowed = RunTo.valueOf(runToString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for MapHex "
-                            +name+" runTo property: "+runToString, e);
-                }
-            }
+        /* As a shortcut, the stopType (for all stations) can also be set in the Hex tag itself.
+         * Any different setting in <Access> will override this shortcut setting.
+         */
+        accessInfo[0].setStopType(Access.parseStopTypeString(tag.getAttributeAsString("type"),
+                "Hex " + name));
 
-            String loopString = accessTag.getAttributeAsString("loop");
-            if (Util.hasValue(loopString)) {
-                try {
-                    loopAllowed = Loop.valueOf(loopString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for MapHex "
-                            +name+" loop property: "+loopString, e);
-                }
-            }
+        List<Tag> accessTags = tag.getChildren("Access");
+        if (accessTags != null) {
+            for (Tag accessTag : accessTags) {
 
-            String typeString = accessTag.getAttributeAsString("type");
-            if (Util.hasValue(typeString)) {
-                try {
-                    stopType = Type.valueOf(typeString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for MapHex "
-                            +name+" stop type property: "+typeString, e);
-                }
-            }
+                int stationNumber = accessTag.getAttributeAsInteger("station", 0);
 
-            String scoreTypeString = accessTag.getAttributeAsString("score");
-            if (Util.hasValue(scoreTypeString)) {
-                try {
-                    scoreType = Score.valueOf(scoreTypeString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for MapHex "
-                            +name+" score type property: "+scoreTypeString, e);
+                if (stationNumber > 0) {
+                    if (stationNumber+1 > accessInfo.length) {
+                        accessInfo = Arrays.copyOf(accessInfo, stationNumber+1);
+                    }
+                    if (accessInfo[stationNumber] == null) accessInfo[stationNumber] = new Access();
+                } else if (stationNumber == 0) {
+                    // That's OK, accessInfo already exists
+                } else {
+                    // Please note, that we cannot check the maximum station number yet.
+                    throw new ConfigurationException ("Invalid <Access> stop (staion) number in hex #"+name);
                 }
+                Access ai = accessInfo[stationNumber];
+                ai.setStopType(Access.parseStopTypeString(accessTag.getAttributeAsString("type"),
+                        "Hex " + name));
+                ai.setRunThroughAllowed(Access.parseRunThroughString(accessTag.getAttributeAsString("runThrough"),
+                        "Hex " + name));
+                ai.setRunToAllowed(Access.parseRunToString(accessTag.getAttributeAsString("runTo"),
+                        "Hex " + name));
+                ai.setLoopAllowed(Access.parseLoopString(accessTag.getAttributeAsString("loop"),
+                        "Hex " + name));
+                ai.setScoreType(Access.parseScoreTypeString(accessTag.getAttributeAsString("score"),
+                        "Hex " + name));
+                ai.setTrainMutexID(accessTag.getAttributeAsString("trainMutexID"));
             }
         }
-
     }
 
     public void finishConfiguration (GameManagerI gameManager) {
@@ -343,15 +303,18 @@ StationHolder, TokenHolder {
             mStops.put(c.getNumber(), c);
         }
 
-        /* Superseded by new code in Stop - or do we still need it?
-        if (runThroughAllowed == null) {
-            runThroughAllowed = currentTile.getColourName().equalsIgnoreCase("red")
-            ? RunThrough.NO : RunThrough.YES;
-        }
-        if (runToAllowed == null) {
-            runToAllowed = RunTo.YES;
-        }
+        /* Make sure that the accessInfo array is minimally as long as 1 + the number of stops on the initial
+         * (preprinted) tile. WARNING: the length does not (yet) change during updates
+         * (I'm not aware of any such cases, though [EV]).
+         * This will almost surely cause problems if the number of stops on a hex would increase.
+         * It is recommended not to use stop-specific access settings in Map.xml in combination with upgradeable hexes.
+         * Use TileSet.xml instead.
          */
+        int maxStationNumber = getCurrentTile().getNumStations();
+        if (maxStationNumber >= accessInfo.length) {
+            accessInfo = Arrays.copyOf(accessInfo, maxStationNumber+1);
+        }
+
     }
 
     public void addImpassableSide (int orientation) {
@@ -541,7 +504,7 @@ StationHolder, TokenHolder {
 
     /**
      * new wrapper function for the LayTile action that calls the actual
-     * upgrade mehod
+     * upgrade method
      * @param action executed LayTile action
      */
     public void upgrade(LayTile action) {
@@ -558,9 +521,9 @@ StationHolder, TokenHolder {
      */
     public void upgrade(TileI newTile, int newRotation, Map<String, Integer> relaidTokens) {
 
-        Stop newCity;
+        Stop newStop;
         String newTracks;
-        List<Stop> newCities;
+        List<Stop> newStops;
 
         if (relaidTokens == null) relaidTokens = new HashMap<String, Integer>();
 
@@ -574,18 +537,18 @@ StationHolder, TokenHolder {
 
             // Check for manual handling of tokens
             for (String compName : relaidTokens.keySet()) {
-                for (Stop city : stops) {
-                    if (city.hasTokenOf(compName)) {
-                        citiesToStations.put(city, newTile.getStations().get(relaidTokens.get(compName)-1));
+                for (Stop stop : stops) {
+                    if (stop.hasTokenOf(compName)) {
+                        citiesToStations.put(stop, newTile.getStations().get(relaidTokens.get(compName)-1));
                     }
                 }
             }
 
             // Scan the old cities/stations,
             // and assign new stations where tracks correspond
-            for (Stop city : stops) {
-                if (citiesToStations.containsKey(city)) continue;
-                Station oldStation = city.getRelatedStation();
+            for (Stop stop : stops) {
+                if (citiesToStations.containsKey(stop)) continue;
+                Station oldStation = stop.getRelatedStation();
                 int[] oldTrackEnds =
                     getTrackEndPoints(currentTile, currentTileRotation,
                             oldStation);
@@ -597,7 +560,7 @@ StationHolder, TokenHolder {
                         for (int j = 0; j < newTrackEnds.length; j++) {
                             if (oldTrackEnds[i] == newTrackEnds[j]) {
                                 // Match found!
-                                citiesToStations.put(city, newStation);
+                                citiesToStations.put(stop, newStation);
                                 continue station;
                             }
                         }
@@ -606,29 +569,29 @@ StationHolder, TokenHolder {
             }
 
             // Map any unassigned cities randomly
-            city: for (Stop city : stops) {
-                if (citiesToStations.containsKey(city)) continue;
+            city: for (Stop stop : stops) {
+                if (citiesToStations.containsKey(stop)) continue;
                 for (Station newStation : newTile.getStations()) {
                     if (citiesToStations.values().contains(newStation)) continue;
-                    citiesToStations.put(city, newStation);
+                    citiesToStations.put(stop, newStation);
                     continue city;
                 }
             }
 
 
             // Assign the new Stations to the existing cities
-            for (Stop city : citiesToStations.keySet()) {
-                Station newStation = citiesToStations.get(city);
-                Station oldStation = city.getRelatedStation();
-                city.setRelatedStation(newStation);
-                city.setSlots(newStation.getBaseSlots());
+            for (Stop stop : citiesToStations.keySet()) {
+                Station newStation = citiesToStations.get(stop);
+                Station oldStation = stop.getRelatedStation();
+                stop.setRelatedStation(newStation);
+                stop.setSlots(newStation.getBaseSlots());
                 newTracks =
                     getConnectionString(newTile,
                             newRotation,
                             newStation.getNumber());
-                city.setTrackEdges(newTracks);
+                stop.setTrackEdges(newTracks);
                 log.debug("Assigned "
-                        + city.getUniqueId()
+                        + stop.getUniqueId()
                         + " from "
                         + oldStation.getId()
                         + " "
@@ -638,7 +601,7 @@ StationHolder, TokenHolder {
                                 + " to " + newStation.getId() + " "
                                 + newTracks);
             }
-            newCities = stops;
+            newStops = stops;
 
         } else {
             // If the number of stations does change,
@@ -646,25 +609,25 @@ StationHolder, TokenHolder {
 
             // Build a map from old to new cities,
             // so that we can move tokens at the end.
-            newCities = new ArrayList<Stop>(4);
-            Map<Integer, Stop> mNewCities = new HashMap<Integer, Stop>(4);
-            Map<Stop, Stop> oldToNewCities = new HashMap<Stop, Stop>();
-            Map<Station, Stop> newStationsToCities =
+            newStops = new ArrayList<Stop>(4);
+            Map<Integer, Stop> mNewStops = new HashMap<Integer, Stop>(4);
+            Map<Stop, Stop> oldToNewStops = new HashMap<Stop, Stop>();
+            Map<Station, Stop> newStationsToStops =
                 new HashMap<Station, Stop>();
 
             // Scan the old cities/stations,
             // and assign new stations where tracks correspond
-            int newCityNumber = 0;
-            for (Stop oldCity : stops) {
-                int cityNumber = oldCity.getNumber();
-                Station oldStation = oldCity.getRelatedStation();
+            int newStopNumber = 0;
+            for (Stop oldStop : stops) {
+                int cityNumber = oldStop.getNumber();
+                Station oldStation = oldStop.getRelatedStation();
                 int[] oldTrackEnds =
                     getTrackEndPoints(currentTile, currentTileRotation,
                             oldStation);
-                log.debug("Old city #"
+                log.debug("Old stop #"
                         + currentTile.getId()
                         + " city "
-                        + oldCity.getNumber()
+                        + oldStop.getNumber()
                         + ": "
                         + getConnectionString(currentTile,
                                 currentTileRotation, oldStation.getNumber()));
@@ -682,26 +645,26 @@ StationHolder, TokenHolder {
                         for (int j = 0; j < newTrackEnds.length; j++) {
                             if (oldTrackEnds[i] == newTrackEnds[j]) {
                                 // Match found!
-                                if (!newStationsToCities.containsKey(newStation)) {
-                                    newCity =
-                                        new Stop(this, ++newCityNumber,
+                                if (!newStationsToStops.containsKey(newStation)) {
+                                    newStop =
+                                        new Stop(this, ++newStopNumber,
                                                 newStation);
-                                    newCities.add(newCity);
-                                    mNewCities.put(cityNumber, newCity);
-                                    newStationsToCities.put(newStation, newCity);
-                                    newCity.setSlots(newStation.getBaseSlots());
+                                    newStops.add(newStop);
+                                    mNewStops.put(cityNumber, newStop);
+                                    newStationsToStops.put(newStation, newStop);
+                                    newStop.setSlots(newStation.getBaseSlots());
                                 } else {
-                                    newCity =
-                                        newStationsToCities.get(newStation);
+                                    newStop =
+                                        newStationsToStops.get(newStation);
                                 }
-                                oldToNewCities.put(oldCity, newCity);
+                                oldToNewStops.put(oldStop, newStop);
                                 newTracks =
                                     getConnectionString(newTile,
                                             newRotation,
                                             newStation.getNumber());
-                                newCity.setTrackEdges(newTracks);
+                                newStop.setTrackEdges(newTracks);
                                 log.debug("Assigned from "
-                                        + oldCity.getUniqueId()
+                                        + oldStop.getUniqueId()
                                         + " #"
                                         + currentTile.getId()
                                         + "/"
@@ -712,7 +675,7 @@ StationHolder, TokenHolder {
                                         + getConnectionString(currentTile,
                                                 currentTileRotation,
                                                 oldStation.getNumber())
-                                                + " to " + newCity.getUniqueId()
+                                                + " to " + newStop.getUniqueId()
                                                 + " #" + newTile.getId() + "/"
                                                 + newRotation + " "
                                                 + newStation.getId() + " "
@@ -728,9 +691,9 @@ StationHolder, TokenHolder {
 
             // If an old city is not yet connected, check if was
             // connected to another city it has merged into (1851 Louisville)
-            for (Stop oldCity : stops) {
-                if (oldToNewCities.containsKey(oldCity)) continue;
-                Station oldStation = oldCity.getRelatedStation();
+            for (Stop oldStop : stops) {
+                if (oldToNewStops.containsKey(oldStop)) continue;
+                Station oldStation = oldStop.getRelatedStation();
                 int[] oldTrackEnds =
                     getTrackEndPoints(currentTile, currentTileRotation,
                             oldStation);
@@ -739,16 +702,16 @@ StationHolder, TokenHolder {
                     if (oldTrackEnds[i] < 0) {
                         int oldStationNumber = -oldTrackEnds[i];
                         // Find the old city that has this number
-                        for (Stop oldCity2 : stops) {
-                            log.debug("Old city "+oldCity2.getNumber()+" has station "+oldCity2.getRelatedStation().getNumber());
-                            log.debug("  and links to new city "+oldToNewCities.get(oldCity2));
-                            if (oldCity2.getRelatedStation().getNumber()
+                        for (Stop oldStop2 : stops) {
+                            log.debug("Old city "+oldStop2.getNumber()+" has station "+oldStop2.getRelatedStation().getNumber());
+                            log.debug("  and links to new city "+oldToNewStops.get(oldStop2));
+                            if (oldStop2.getRelatedStation().getNumber()
                                     == oldStationNumber
-                                    && oldToNewCities.containsKey(oldCity2)) {
-                                newCity = oldToNewCities.get(oldCity2);
-                                oldToNewCities.put(oldCity, newCity);
+                                    && oldToNewStops.containsKey(oldStop2)) {
+                                newStop = oldToNewStops.get(oldStop2);
+                                oldToNewStops.put(oldStop, newStop);
                                 log.debug("Assigned from "
-                                        + oldCity.getUniqueId()
+                                        + oldStop.getUniqueId()
                                         + " #"
                                         + currentTile.getId()
                                         + "/"
@@ -759,11 +722,11 @@ StationHolder, TokenHolder {
                                         + getConnectionString(currentTile,
                                                 currentTileRotation,
                                                 oldStation.getNumber())
-                                                + " to " + newCity.getUniqueId()
+                                                + " to " + newStop.getUniqueId()
                                                 + " #" + newTile.getId() + "/"
                                                 + newRotation + " "
-                                                + newCity.getRelatedStation().getId() + " "
-                                                + newCity.getTrackEdges());
+                                                + newStop.getRelatedStation().getId() + " "
+                                                + newStop.getTrackEdges());
                                 break station;
 
 
@@ -777,22 +740,22 @@ StationHolder, TokenHolder {
             // Check if there any new stations not corresponding
             // to an old city.
             for (Station newStation : newTile.getStations()) {
-                if (newStationsToCities.containsKey(newStation)) continue;
+                if (newStationsToStops.containsKey(newStation)) continue;
 
                 // Create a new city for such a station.
-                int cityNumber;
-                for (cityNumber = 1; mNewCities.containsKey(cityNumber); cityNumber++)
+                int stopNumber;
+                for (stopNumber = 1; mNewStops.containsKey(stopNumber); stopNumber++)
                     ;
-                newCity = new Stop(this, ++newCityNumber, newStation);
-                newCities.add(newCity);
-                mNewCities.put(cityNumber, newCity);
-                newStationsToCities.put(newStation, newCity);
-                newCity.setSlots(newStation.getBaseSlots());
+                newStop = new Stop(this, ++newStopNumber, newStation);
+                newStops.add(newStop);
+                mNewStops.put(stopNumber, newStop);
+                newStationsToStops.put(newStation, newStop);
+                newStop.setSlots(newStation.getBaseSlots());
                 newTracks =
                     getConnectionString(newTile, newRotation,
                             newStation.getNumber());
-                newCity.setTrackEdges(newTracks);
-                log.debug("New city added " + newCity.getUniqueId() + " #"
+                newStop.setTrackEdges(newTracks);
+                log.debug("New city added " + newStop.getUniqueId() + " #"
                         + newTile.getId() + "/" + newRotation + " "
                         + newStation.getId() + " " + newTracks);
             }
@@ -801,15 +764,15 @@ StationHolder, TokenHolder {
             Map<TokenI, TokenHolder> tokenDestinations =
                 new HashMap<TokenI, TokenHolder>();
 
-            for (Stop oldCity : stops) {
-                newCity = oldToNewCities.get(oldCity);
-                if (newCity != null) {
-                    oldtoken: for (TokenI token : oldCity.getTokens()) {
+            for (Stop oldStop : stops) {
+                newStop = oldToNewStops.get(oldStop);
+                if (newStop != null) {
+                    oldtoken: for (TokenI token : oldStop.getTokens()) {
                         if (token instanceof BaseToken) {
                             // Check if the new city already has such a token
                             PublicCompanyI company =
                                 ((BaseToken) token).getCompany();
-                            for (TokenI token2 : newCity.getTokens()) {
+                            for (TokenI token2 : newStop.getTokens()) {
                                 if (token2 instanceof BaseToken
                                         && company == ((BaseToken) token2).getCompany()) {
                                     // No duplicate tokens in one city!
@@ -817,7 +780,7 @@ StationHolder, TokenHolder {
                                     log.debug("Duplicate token "
                                             + token.getUniqueId()
                                             + " moved from "
-                                            + oldCity.getName() + " to "
+                                            + oldStop.getName() + " to "
                                             + company.getName());
                                     ReportBuffer.add(LocalText.getText(
                                             "DuplicateTokenRemoved",
@@ -827,10 +790,10 @@ StationHolder, TokenHolder {
                                 }
                             }
                         }
-                        tokenDestinations.put(token, newCity);
+                        tokenDestinations.put(token, newStop);
                         log.debug("Token " + token.getUniqueId()
-                                + " moved from " + oldCity.getName() + " to "
-                                + newCity.getName());
+                                + " moved from " + oldStop.getName() + " to "
+                                + newStop.getName());
                     }
                 if (!tokenDestinations.isEmpty()) {
                     for (TokenI token : tokenDestinations.keySet()) {
@@ -847,7 +810,7 @@ StationHolder, TokenHolder {
 
         // Replace the tile
         new TileMove(this, currentTile, currentTileRotation, stops,
-                newTile, newRotation, newCities);
+                newTile, newRotation, newStops);
 
         /* TODO Further consequences to be processed here, e.g. new routes etc. */
     }
@@ -1376,23 +1339,11 @@ StationHolder, TokenHolder {
         return endpoints;
     }
 
-    public RunThrough isRunThroughAllowed() {
-        return runThroughAllowed;
+    public Access getAccessInfo(int stationNumber) {
+        if (stationNumber < 0 || stationNumber >= accessInfo.length) return null;
+        if (accessInfo[stationNumber] == null) return new Access();
+        return accessInfo[stationNumber];
     }
 
-    public RunTo isRunToAllowed() {
-        return runToAllowed;
-    }
 
-    public Loop isLoopAllowed () {
-        return loopAllowed;
-    }
-
-    public Type getStopType() {
-        return stopType;
-    }
-
-    public Score getScoreType() {
-        return scoreType;
-    }
 }

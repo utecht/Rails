@@ -6,6 +6,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import rails.game.Access.Loop;
+import rails.game.Access.RunThrough;
+import rails.game.Access.RunTo;
+import rails.game.Access.ScoreType;
+import rails.game.Access.StopType;
 import rails.game.move.Moveable;
 import rails.game.state.GenericState;
 import rails.util.Util;
@@ -37,65 +42,13 @@ public class Stop implements TokenHolder {
     private String trackEdges;
 
 
-    private Type type = null;
-    private RunTo runToAllowed = null;
-    private RunThrough runThroughAllowed = null;
-    private Loop loopAllowed = null;
-    private Score scoreType = null;
+
+    private StopType stopType = null;
+
+    private Access accessInfo = new Access();
 
     protected static Logger log =
         Logger.getLogger(Stop.class.getPackage().getName());
-
-    public enum RunTo {
-        YES,
-        NO,
-        TOKENONLY
-    }
-
-    public enum RunThrough {
-        YES,
-        NO,
-        TOKENONLY
-    }
-
-    public enum Loop {
-        YES,
-        NO
-    }
-
-    public enum Type {
-
-        CITY (RunTo.YES, RunThrough.YES, Loop.YES, Score.MAJOR),
-        TOWN (RunTo.YES, RunThrough.YES, Loop.YES, Score.MINOR),
-        OFFMAP (RunTo.YES, RunThrough.NO, Loop.NO, Score.MAJOR);
-
-        private RunTo defaultRunToAllowed;
-        private RunThrough defaultRunThroughAllowed;
-        private Loop defaultLoopAllowed;
-        private Score defaultScoreType;
-
-        Type (RunTo runTo,
-                RunThrough runThrough,
-                Loop loop,
-                Score scoreType) {
-
-            this.defaultRunToAllowed = runTo;
-            this.defaultRunThroughAllowed = runThrough;
-            this.defaultLoopAllowed = loop;
-            this.defaultScoreType = scoreType;
-        }
-
-        public RunTo getDefaultRunTo() { return defaultRunToAllowed; }
-        public RunThrough getDefaultRunThrough() { return defaultRunThroughAllowed; }
-        public Loop getDefaultLoop() { return defaultLoopAllowed; }
-        public Score getDefaultScoreType() { return defaultScoreType; }
-
-    }
-
-    public enum Score {
-        MAJOR,
-        MINOR
-    }
 
     public Stop(MapHex mapHex, int number, Station station) {
         this.mapHex = mapHex;
@@ -112,73 +65,156 @@ public class Stop implements TokenHolder {
 
     private void initStopProperties () {
 
+        boolean logdetail = false;
+        String loghex = "J1";
+
         Station station = relatedStation.get();
+        int stationNumber = station.getNumber();
         TileI tile = station.getTile();
         MapManager mapManager = mapHex.getMapManager();
         TileManager tileManager = tile.getTileManager();
 
-        // Stop type
-        type = mapHex.getStopType();
-        if (type == null) type = tile.getStopType();
-        if (type == null) {
+        /* Merge the configured stop property layers,
+         * using the upper four precedence levels (see class Access).
+         */
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+0+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(mapHex.getAccessInfo(stationNumber));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+1+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(tile.getAccessInfo(stationNumber));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+2+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(mapHex.getAccessInfo(0));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+3+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(tile.getAccessInfo(0));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+4a Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+
+        /* Check the stop type.
+         * If still null at this stage, determine it from the Station properties.
+         */
+        stopType = accessInfo.getStopType();
+        if (stopType == null) {
             String stationType = relatedStation.get().getType();
             if (stationType.equals(Station.CITY)) {
-                type = Type.CITY;
+                stopType = StopType.CITY;
             } else if (stationType.equals(Station.TOWN)) {
-                type = Type.TOWN;
+                stopType = StopType.TOWN;
             } else if (stationType.equals(Station.OFF_MAP_AREA)) {
-                type = Type.OFFMAP;
+                stopType = StopType.OFFMAP;
             } else if (stationType.equals(Station.PASS)) {
-                type = Type.CITY;
+                stopType = StopType.CITY;
             } else {
                 // The above four types seem to be all that can be assigned in ConvertTileXML.
                 // If all else fails, assume City.
-                type = Type.CITY;
+                stopType = StopType.CITY;
             }
         }
 
-        // RunTo
-        runToAllowed = mapHex.isRunToAllowed();
-        if (runToAllowed == null) runToAllowed = tile.isRunToAllowed();
-        if (runToAllowed == null) runToAllowed = mapManager.getRunToDefault(type);
-        if (runToAllowed == null) runToAllowed = tileManager.getRunToDefault(type);
-        if (runToAllowed == null) runToAllowed = mapManager.getRunToDefault(null);
-        if (runToAllowed == null) runToAllowed = tileManager.getRunToDefault(null);
-        if (runToAllowed == null) runToAllowed = type.getDefaultRunTo();
+        /* Now merge the default stop property layers,
+         * using the lower five precedence levels (see class Access).
+         */
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+4b Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(mapManager.getAccessInfoDefaults(stopType));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+5+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(tileManager.getAccessInfoDefaults(stopType));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+6+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(mapManager.getAccessInfoDefaults(null));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+7+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(tileManager.getAccessInfoDefaults(null));
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+8+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
+        accessInfo.merge(stopType.getAccessInfoDefaults());
 
-        // RunThrough
-        runThroughAllowed = mapHex.isRunThroughAllowed();
-        if (runThroughAllowed == null) runThroughAllowed = tile.isRunThroughAllowed();
-        if (runThroughAllowed == null) runThroughAllowed = mapManager.getRunThroughDefault(type);
-        if (runThroughAllowed == null) runThroughAllowed = tileManager.getRunThroughDefault(type);
-        if (runThroughAllowed == null) runThroughAllowed = mapManager.getRunThroughDefault(null);
-        if (runThroughAllowed == null) runThroughAllowed = tileManager.getRunThroughDefault(null);
-        if (runThroughAllowed == null) runThroughAllowed = type.getDefaultRunThrough();
-
-        // Loop
-        loopAllowed = mapHex.isLoopAllowed();
-        if (loopAllowed == null) loopAllowed = tile.isLoopAllowed();
-        if (loopAllowed == null) loopAllowed = mapManager.getLoopDefault(type);
-        if (loopAllowed == null) loopAllowed = tileManager.getLoopDefault(type);
-        if (loopAllowed == null) loopAllowed = mapManager.getLoopDefault(null);
-        if (loopAllowed == null) loopAllowed = tileManager.getLoopDefault(null);
-        if (loopAllowed == null) loopAllowed = type.getDefaultLoop();
-
-        // Score type
-        scoreType = mapHex.getScoreType();
-        if (scoreType == null) scoreType = tile.getScoreType();
-        if (scoreType == null) scoreType = mapManager.getScoreTypeDefault(type);
-        if (scoreType == null) scoreType = tileManager.getScoreTypeDefault(type);
-        if (scoreType == null) scoreType = type.getDefaultScoreType();
-
-        //log.debug("+++ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
-        //        +": stopType="+type+" runTo="+runToAllowed+" runThrough="+runThroughAllowed
-        //        +" loop="+loopAllowed+" scoreType="+scoreType);
+        if (logdetail && mapHex.getName().equalsIgnoreCase(loghex)) {
+            log.debug("+9+ Hex="+mapHex.getName()+" tile="+tile.getId()+" city="+number
+                    +": stopType="+accessInfo.getStopType()
+                    +" runTo="+accessInfo.getRunToAllowed()
+                    +" runThrough="+accessInfo.getRunThroughAllowed()
+                    +" loop="+accessInfo.getLoopAllowed()
+                    +" scoreType="+accessInfo.getScoreType()
+                    +" mutex="+accessInfo.getTrainMutexID());
+        }
     }
 
     public String getName() {
         return mapHex.getName() + "/" + number;
-
     }
 
     /**
@@ -308,28 +344,32 @@ public class Stop implements TokenHolder {
         this.trackEdges = trackEdges;
     }
 
-    public Type getType() {
-        return type;
+    public StopType getType() {
+        return stopType;
     }
 
-    public Score getScoreType () {
-        return scoreType;
+    public ScoreType getScoreType () {
+        return accessInfo.getScoreType();
     }
 
     public RunTo isRunToAllowed() {
-        return runToAllowed;
+        return accessInfo.getRunToAllowed();
     }
 
     public RunThrough isRunThroughAllowed() {
-        return runThroughAllowed;
+        return accessInfo.getRunThroughAllowed();
     }
 
     public Loop isLoopAllowed() {
-        return loopAllowed;
+        return accessInfo.getLoopAllowed();
+    }
+
+    public String getTrainMutexID() {
+        return accessInfo.getTrainMutexID();
     }
 
     public boolean isRunToAllowedFor (PublicCompanyI company) {
-        switch (runToAllowed) {
+        switch (accessInfo.getRunToAllowed()) {
         case YES:
             return true;
         case NO:
@@ -343,7 +383,7 @@ public class Stop implements TokenHolder {
     }
 
     public boolean isRunThroughAllowedFor (PublicCompanyI company) {
-        switch (runThroughAllowed) {
+        switch (accessInfo.getRunThroughAllowed()) {
         case YES: // either it has no tokens at all, or it has a company tokens or empty token slots
             return !hasTokens() || hasTokenOf (company) || hasTokenSlotsLeft() ;
         case NO:

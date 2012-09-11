@@ -7,12 +7,7 @@ import org.apache.log4j.Logger;
 
 import rails.common.Config;
 import rails.common.parser.*;
-import rails.game.Stop.Loop;
-import rails.game.Stop.RunThrough;
-import rails.game.Stop.RunTo;
-import rails.game.Stop.Score;
-import rails.game.Stop.Type;
-import rails.util.Util;
+import rails.game.Access.StopType;
 
 /**
  * MapManager configures the map layout from XML
@@ -56,10 +51,11 @@ public class MapManager implements ConfigurableComponentI {
     protected static final int[] yDeltaEW = new int[] { +1, 0, -1, -1, 0, +1 };
 
     // Stop property defaults per stop type
-    protected Map<Type,RunTo> runToDefaults = new HashMap<Type, RunTo>();
-    protected Map<Type,RunThrough> runThroughDefaults = new HashMap<Type, RunThrough>();
-    protected Map<Type,Loop> loopDefaults = new HashMap<Type, Loop>();
-    protected Map<Type,Score> scoreTypeDefaults = new HashMap<Type, Score>();
+    //protected Map<Type,RunTo> runToDefaults = new HashMap<Type, RunTo>();
+    //protected Map<Type,RunThrough> runThroughDefaults = new HashMap<Type, RunThrough>();
+    //protected Map<Type,Loop> loopDefaults = new HashMap<Type, Loop>();
+    //protected Map<Type,ScoreType> scoreTypeDefaults = new HashMap<Type, ScoreType>();
+    protected Map<StopType, Access> accessDefaults = new HashMap<StopType, Access>();
 
     protected static Logger log =
         Logger.getLogger(MapManager.class.getPackage().getName());
@@ -164,71 +160,42 @@ public class MapManager implements ConfigurableComponentI {
         }
 
         // Parse default stop types
-        Type type;
-        RunTo runTo;
-        RunThrough runThrough;
-        Loop loop;
-        Score score;
-        String s;
+        StopType stopType;
+        Access accessDetail;
         Tag defaultsTag = tag.getChild("Defaults");
         if (defaultsTag != null) {
             List<Tag> accessTags = defaultsTag.getChildren("Access");
             for (Tag accessTag : accessTags) {
-                // Type
-                s = accessTag.getAttributeAsString("type", null);
-                if (Util.hasValue(s)) {
-                    try {
-                        type = Type.valueOf(s.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        throw new ConfigurationException ("Illegal value for default property type: "+s, e);
-                    }
+
+                // Type. Create an Access object, even if stopType is null.
+                stopType = Access.parseStopTypeString(accessTag.getAttributeAsString("type"),
+                "MapManager default");
+                if (!accessDefaults.containsKey(stopType)) {
+                    accessDefaults.put(stopType, accessDetail = new Access());
                 } else {
-                    type = null; // For default defaults
+                    accessDetail = accessDefaults.get(stopType);
                 }
-                // RunTo
-                s = accessTag.getAttributeAsString("runTo", null);
-                if (Util.hasValue(s)) {
-                    try {
-                        runTo = RunTo.valueOf(s.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        throw new ConfigurationException ("Illegal value for "
-                                +type+" default runTo property: "+s, e);
-                    }
-                    runToDefaults.put(type, runTo);
-                }
+
                 // RunThrough
-                s = accessTag.getAttributeAsString("runThrough", null);
-                if (Util.hasValue(s)) {
-                    try {
-                        runThrough = RunThrough.valueOf(s.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        throw new ConfigurationException ("Illegal value for "
-                                +type+" default runThrough property: "+s, e);
-                    }
-                    runThroughDefaults.put(type, runThrough);
-                }
+                accessDetail.setRunThroughAllowed(Access.parseRunThroughString(accessTag.getAttributeAsString("runThrough"),
+                        "MapManager default, type=" + stopType));
+
+                // RunTo
+                accessDetail.setRunToAllowed(Access.parseRunToString(accessTag.getAttributeAsString("runTo"),
+                        "MapManager default, type=" + stopType));
+
                 // Loop
-                s = accessTag.getAttributeAsString("loop", null);
-                if (Util.hasValue(s)) {
-                    try {
-                        loop = Loop.valueOf(s.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        throw new ConfigurationException ("Illegal value for "
-                                +type+" default loop property: "+s, e);
-                    }
-                    loopDefaults.put(type, loop);
-                }
+                accessDetail.setLoopAllowed(Access.parseLoopString(accessTag.getAttributeAsString("loop"),
+                        "MapManager default, type=" + stopType));
+
                 // Score type (not allowed for a null stop type)
-                s = accessTag.getAttributeAsString("scoreType", null);
-                if (type != null && Util.hasValue(s)) {
-                    try {
-                        score = Score.valueOf(s.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        throw new ConfigurationException ("Illegal value for "
-                                +type+" default score type property: "+s, e);
-                    }
-                    scoreTypeDefaults.put(type, score);
+                if (stopType != null) {
+                    accessDetail.setScoreType(Access.parseScoreTypeString(accessTag.getAttributeAsString("score"),
+                            "MapManager default, type=" + stopType));
                 }
+
+                // Train Mutex ID (to allow exclusions)
+                accessDetail.setTrainMutexID(accessTag.getAttributeAsString("trainMutexID"));
             }
         }
     }
@@ -553,20 +520,29 @@ public class MapManager implements ConfigurableComponentI {
         return mapImageUsed;
     }
 
-    public RunTo getRunToDefault(Type type) {
-        return runToDefaults.containsKey(type) ? runToDefaults.get(type) : null;
+    public Access getAccessInfoDefaults(StopType stopType) {
+        return accessDefaults.get(stopType);
     }
 
-    public RunThrough getRunThroughDefault(Type type) {
-        return runThroughDefaults.containsKey(type) ? runThroughDefaults.get(type) : null;
+    /*
+    public RunTo getRunToDefault(StopType stopType) {
+        return accessDefaults.containsKey(stopType) ? accessDefaults.get(stopType).getRunToAllowed() : null;
     }
 
-    public Loop getLoopDefault(Type type) {
-        return loopDefaults.containsKey(type) ? loopDefaults.get(type) : null;
+    public RunThrough getRunThroughDefault(StopType stopType) {
+        return accessDefaults.containsKey(stopType) ? accessDefaults.get(stopType).getRunThroughAllowed() : null;
     }
 
-    public Score getScoreTypeDefault(Type type) {
-        return scoreTypeDefaults.containsKey(type) ? scoreTypeDefaults.get(type) : null;
+    public Loop getLoopDefault(StopType stopType) {
+        return accessDefaults.containsKey(stopType) ? accessDefaults.get(stopType).getLoopAllowed() : null;
     }
 
+    public ScoreType getScoreTypeDefault(StopType stopType) {
+        return accessDefaults.containsKey(stopType) ? accessDefaults.get(stopType).getScoreType() : null;
+    }
+
+    public String getTrainMutexIdDefault (StopType stopType) {
+        return accessDefaults.containsKey(stopType) ? accessDefaults.get(stopType).getTrainMutexID() : null;
+    }
+     */
 }

@@ -228,14 +228,14 @@ public final class NetworkVertex implements Comparable<NetworkVertex> {
         // check if it has to be removed because it is run-to only
         // if company == null, then no vertex gets removed
         if (company != null && !city.isRunToAllowedFor(company)) {
-           log.info("Vertex is removed");
-           return false;
+            log.info("Vertex is removed");
+            return false;
         }
 
         // check if it is a major or minor
-        if (city.getScoreType() == Stop.Score.MAJOR) {
+        if (city.getScoreType() == Access.ScoreType.MAJOR) {
             setStationType(StationType.MAJOR);
-        } else if (city.getScoreType() == Stop.Score.MINOR) {
+        } else if (city.getScoreType() == Access.ScoreType.MINOR) {
             setStationType(StationType.MINOR);
         }
 
@@ -256,6 +256,10 @@ public final class NetworkVertex implements Comparable<NetworkVertex> {
             if (hex.getCityName() != null && !hex.getCityName().equals("")
                     && station.getCityName() != null && !station.getCityName().equals("")) {
                 cityName = hex.getCityName() + "." + station.getCityName();
+                /* EV: To use the new trainMutexID, the above two lines should be changed to:
+                    && city.getTrainMutexID() != null && !city.getTrainMutexID().equals("")) {
+                cityName = hex.getCityName() + "." + city.getTrainMutexID();
+                 */
             }
         }
 

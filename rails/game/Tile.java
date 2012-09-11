@@ -9,13 +9,7 @@ import rails.algorithms.RevenueBonusTemplate;
 import rails.common.LocalText;
 import rails.common.parser.ConfigurationException;
 import rails.common.parser.Tag;
-import rails.game.Stop.Loop;
-import rails.game.Stop.RunThrough;
-import rails.game.Stop.RunTo;
-import rails.game.Stop.Score;
-import rails.game.Stop.Type;
 import rails.game.model.ModelObject;
-import rails.util.Util;
 
 /** Represents a certain tile <i>type</i>, identified by its id (tile number).
  * <p> For each tile number, only one tile object is created.
@@ -61,11 +55,26 @@ public class Tile extends ModelObject implements TileI, StationHolder, Comparabl
     public static final int UNLIMITED_TILES = -1;
 
     // Stop properties
-    protected Type stopType = null;
+    /*
+    protected StopType stopType = null;
     protected RunTo runToAllowed = null;
     protected RunThrough runThroughAllowed = null;
     protected Loop loopAllowed = null;
-    protected Score scoreType = null;
+    protected ScoreType scoreType = null;
+     */
+    /** Access info array with elements:
+     * [0] for per-tile access parameters. Must exist.<br>
+     * [1]... for each station (if any). Will remain null if no station-specific access values exist.
+     * 
+     * <p>Station-specific access parameters apply to one tile station only.
+     * Station numbers are defined in Tiles.xml as "city1", ... where "1" is the number.
+     * (station numbers always start with 1).
+     * 
+     * <p>NOTE: per-station access parameters can also be defined in Map.xml.
+     * It is recommended to use that option only for non-upgradeable preprinted tiles,
+     * as station numbers are NOT guaranteed to transfer unchanged while upgrading.
+     */
+    protected Access[] accessInfo;
 
     protected TileManager tileManager;
 
@@ -325,55 +334,42 @@ public class Tile extends ModelObject implements TileI, StationHolder, Comparabl
         }
 
         // Stop properties
-        Tag accessTag = setTag.getChild("Access");
-        if (accessTag != null) {
-            String runThroughString = accessTag.getAttributeAsString("runThrough");
-            if (Util.hasValue(runThroughString)) {
-                try {
-                    runThroughAllowed = RunThrough.valueOf(runThroughString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for Tile"
-                            +name+" runThrough property: "+runThroughString, e);
-                }
-            }
+        accessInfo = new Access[1 + stations.size()];
+        accessInfo[0] = new Access();
 
-            String runToString = accessTag.getAttributeAsString("runTo");
-            if (Util.hasValue(runToString)) {
-                try {
-                    runToAllowed = RunTo.valueOf(runToString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for Tile "
-                            +name+" runTo property: "+runToString, e);
-                }
-            }
+        if (id <= 0) {     // Setting per-tile stop properties is allowed for preprinted tiles only
 
-            String loopString = accessTag.getAttributeAsString("loop");
-            if (Util.hasValue(loopString)) {
-                try {
-                    loopAllowed = Loop.valueOf(loopString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for Tile "
-                            +name+" loop property: "+loopString, e);
-                }
-            }
+            /* As a shortcut, the stopType (for all stations) can also be set in the Tile tag itself.
+             * Any different setting in <Access> will override this shortcut setting.
+             */
+            accessInfo[0].setStopType(Access.parseStopTypeString(setTag.getAttributeAsString("type"),
+                    "Tile #" + id));
 
-            String typeString = accessTag.getAttributeAsString("type");
-            if (Util.hasValue(typeString)) {
-                try {
-                    stopType = Type.valueOf(typeString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for Tile "
-                            +name+" stop type property: "+typeString, e);
-                }
-            }
+            List<Tag> accessTags = setTag.getChildren("Access");
+            if (accessTags != null) {
+                for (Tag accessTag : accessTags) {
 
-            String scoreTypeString = accessTag.getAttributeAsString("score");
-            if (Util.hasValue(scoreTypeString)) {
-                try {
-                    scoreType = Score.valueOf(scoreTypeString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException ("Illegal value for Tile "
-                            +name+" sscore type property: "+scoreTypeString, e);
+                    int stationNumber = accessTag.getAttributeAsInteger("station", 0);
+
+                    if (stationNumber > 0 && stationNumber <= stations.size()) {
+                        if (accessInfo[stationNumber] == null) accessInfo[stationNumber] = new Access();
+                    } else if (stationNumber == 0) {
+                        // That's OK, accessInfo already exists
+                    } else {
+                        throw new ConfigurationException ("Invalid <Access> station number in tile #"+id);
+                    }
+                    Access ai = accessInfo[stationNumber];
+                    ai.setStopType(Access.parseStopTypeString(accessTag.getAttributeAsString("type"),
+                            "Tile #" + id));
+                    ai.setRunThroughAllowed(Access.parseRunThroughString(accessTag.getAttributeAsString("runThrough"),
+                            "Tile #" + id));
+                    ai.setRunToAllowed(Access.parseRunToString(accessTag.getAttributeAsString("runTo"),
+                            "Tile #" + id));
+                    ai.setLoopAllowed(Access.parseLoopString(accessTag.getAttributeAsString("loop"),
+                            "Tile #" + id));
+                    ai.setScoreType(Access.parseScoreTypeString(accessTag.getAttributeAsString("score"),
+                            "Tile #" + id));
+                    ai.setTrainMutexID(accessTag.getAttributeAsString("trainMutexID"));
                 }
             }
         }
@@ -569,6 +565,13 @@ public class Tile extends ModelObject implements TileI, StationHolder, Comparabl
         return stations.size();
     }
 
+    public Station findStationByNumber (int stationNumber) {
+        for (Station station : stations) {
+            if (station.getNumber() == stationNumber) return station;
+        }
+        return null;
+    }
+
     public boolean relayBaseTokensOnUpgrade() {
         return relayBaseTokensOnUpgrade;
     }
@@ -635,24 +638,10 @@ public class Tile extends ModelObject implements TileI, StationHolder, Comparabl
     }
 
 
-    public Type getStopType() {
-        return stopType;
-    }
-
-    public RunTo isRunToAllowed() {
-        return runToAllowed;
-    }
-
-    public RunThrough isRunThroughAllowed() {
-        return runThroughAllowed;
-    }
-
-    public Loop isLoopAllowed() {
-        return loopAllowed;
-    }
-
-    public Score getScoreType() {
-        return scoreType;
+    public Access getAccessInfo(int stationNumber) {
+        if (stationNumber < 0 || stationNumber >= accessInfo.length) return null;
+        if (accessInfo[stationNumber] == null) return new Access();
+        return accessInfo[stationNumber];
     }
 
     public TileManager getTileManager () {
