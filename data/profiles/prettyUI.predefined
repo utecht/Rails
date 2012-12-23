@@ -7,5 +7,6 @@ gridPanel.tableBorders=enabled
 map.image.display=yes
 map.displayCurrentRoutes=yes
 map.highlightHexes=yes
+map.highlightUpgrades=yes
 ### cannot be derived
 profile.final=yes
