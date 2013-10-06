@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<ComponentManager>
+        <Component name="GameManager" class="rails.game.GameManager">
+        <!--Component name="GameManager" class="rails.game.specific._1824.GameManager_1824"-->
+                <Game name="1824"/>
+                <GameOption name="RouteAwareness" values="Highlight,Deactivate" default="Highlight"/>
+                <GameOption name="RevenueCalculation" values="Suggest,Deactivate" default="Highlight"/>
+                <GameOption name="UnlimitedTiles" values="No,Yellow Plain,Yes" default="No"/>
+                <GameOption name="NoMapMode" type="toggle" default="no"/>
+                <GameOption name="UnlimitedTopTrains" values="No,Yes" default="No"/>
+                <GameParameters>
+                        <PlayerShareLimit percentage="60"/>
+                        <!--  Players might get more shares if they exchange Mountain and Coal Companies -->
+                        <BankPoolLimit percentage="50"/>
+                        <!--StockRound class="rails.game.specific._1824.StockRound_1824"   -->
+                        <StockRound class="rails.game.StockRound" 
+                                sequence="SellBuy">
+                                <NoSaleInFirstSR/>
+                                <NoSaleIfNotOperated/>
+                        </StockRound>
+                        <!--OperatingRound class="rails.game.specific._1824.OperatingRound_1824"-->
+                        <OperatingRound class="rails.game.OperatingRound">
+                                <EmergencyTrainBuying mustBuyCheapestTrain="no" mayAlwaysBuyNewTrain="yes" mayBuyFromCompany="yes"/>
+                        </OperatingRound>
+                </GameParameters>
+                <!--GuiClasses>
+                        <StatusWindow class="rails.ui.swing.gamespecific._1824.StatusWindow_1824"/>
+                        <GameUIManager class="rails.ui.swing.gamespecific._1824.GameUIManager_1824"/>
+                </GuiClasses-->
+                <EndOfGame>
+                        <BankBreaks limit="0" finish="currentSet"/>
+                        <!-- "Runs out"; when "broken", -1 is the limit -->
+                </EndOfGame>
+        </Component>
+        <Component name="PlayerManager" class="rails.game.PlayerManager">
+                <Players number="3" cash="820" certLimit="21"/>
+                <Players number="4" cash="680" certLimit="16"/>
+                <Players number="5" cash="560" certLimit="13"/>
+                <Players number="6" cash="460" certLimit="11"/>
+        </Component>
+        <Component name="Bank" class="rails.game.Bank">
+                <Bank amount="12000"/>
+                <Money format="@K"/>
+        </Component>
+        <Component name="TileManager" class="rails.game.TileManager"
+                file="TileSet.xml"/>
+        <Component name="Map" class="rails.game.MapManager" file="Map.xml"/>
+        <Component name="CompanyManager" class="rails.game.CompanyManager"
+                file="CompanyManager.xml"/>
+        <Component name="StockMarket" class="rails.game.StockMarket"
+                file="StockMarket.xml"/>
+        <Component name="TrainManager" class="rails.game.TrainManager">
+                <Defaults>
+                        <Reach base="stops" countTowns="yes"/>
+                        <Score towns="yes"/>
+                </Defaults>
+                <TrainType name="1G" majorStops="1" cost="120" quantity="6">
+                        <Reach countTowns="no"/>
+                        <NewPhase phaseName="2"/>
+                </TrainType>
+                <TrainType name="2" majorStops="2" cost="80" quantity="9"/>
+                <TrainType name="3" majorStops="3" cost="180" exchange="140" quantity="7">
+                        <NewPhase phaseName="3"/>
+                </TrainType>
+                <TrainType name="2G" majorStops="2" cost="240" exchange="180" quantity="5">
+                        <Reach countTowns="no"/>
+                </TrainType>
+                <TrainType name="4" majorStops="4" cost="280" exchange="190" quantity="4">
+                        <NewPhase phaseName="4"/>
+                </TrainType>
+                <TrainType name="3G" majorStops="3" cost="360" exchange="240" quantity="4">
+                        <Reach countTowns="no"/>
+                        <NewPhase phaseName="3G"/>
+                </TrainType>
+                <TrainType name="5" majorStops="5" cost="400" exchange="260" quantity="3">
+                        <NewPhase phaseName="5"/>
+                </TrainType>
+               <TrainType name="6" majorStops="6" cost="600" exchange="400" quantity="3">
+                        <NewPhase phaseName="6"></NewPhase>
+                 </TrainType>
+                 <TrainType name="4G" majorStops="4" cost="600" exchange="420" quantity="3">
+                        <Reach countTowns="no"/>
+                        <NewPhase phaseName="4G"/>
+                </TrainType>
+                <TrainType name="8" majorStops="8" cost="800" exchange="500" quantity="2">
+                        <NewPhase phaseName="8"></NewPhase>
+                 </TrainType>
+                 <TrainType name="5G" majorStops="5" cost="800" exchange="500" quantity="2">
+                        <Reach countTowns="no"/>
+                        <NewPhase phaseName="5G"/>
+                </TrainType>
+                <TrainType name="10" majorStops="10" cost="1000" exchange="600" quantity="unlimited">
+                        <NewPhase phaseName="10"></NewPhase>
+                 </TrainType>
+                                 
+                <!-- TBD: Add support for 1824's trade-in rule. -->
+        </Component>
+        <Component name="PhaseManager" class="rails.game.PhaseManager">
+                <Phase name="2" realName="2">
+                        <!-- Wish list: This "phase change" ought not be needed.
+                             It is triggered by the first purchase of a 1G-train
+                             and makes 2-trains available.  (I doubt it will be
+                             a problem, since all ten coal companies need to buy
+                             1G trains on their first turn in order to run.) -->
+                        <Tiles colour="yellow"/>
+                        <Trains released="1G"/>
+                        <OperatingRounds number="1"/>
+                </Phase>
+                <Phase name="3" realName="3">
+                        <Tiles colour="yellow,green"/>
+                        <Trains tradingAllowed="yes" limitStep="2" released="2G"/>
+                        <OperatingRounds number="2"/>
+                </Phase>
+                <Phase name="4" realName="4">
+                        <Trains rusted="2" released="3G"/>
+                </Phase>
+                <Phase name="3G" realName="3G">
+                        <Trains rusted="1G"/>
+                </Phase>
+                <Phase name="5" realName="5">
+                        <Tiles colour="yellow,green,brown"/>
+                        <Trains limitStep="4"/>
+                        <!--Privates close="yes"/-->
+                        <Info key="PhaseClosesAllPrivates"/>
+                </Phase>
+                <Phase name="6" realName="6">
+                        <Trains rusted="3" released="4G"/>
+                        <OperatingRounds number="3"/>
+                </Phase>
+                <Phase name="4G" realName="4G">
+                        <Trains rusted="2G"/>
+                </Phase>
+                 <Phase name="8" realName="8">
+                        <Trains rusted="4" released="5G"/>
+                        <Tiles colour="yellow,green,brown"/>      
+                </Phase>
+                <Phase name="5G" realName="5G">
+                		<Trains rusted="3G"/>
+                </Phase>
+                <Phase name="10" realName="8">
+                         <Trains rusted="5"/> 
+                </Phase>
+        </Component>
+</ComponentManager>
