@@ -15638,10 +15638,12 @@ object TTilesWrapper
         item
           Position1 = tp4SideB
           Position2 = tp3SideB
+          Layer = 2
         end
         item
           Position1 = tp4SideB
           Position2 = tp4SideE
+          Layer = 2
         end>
       Junctions = <
         item
@@ -15668,6 +15670,7 @@ object TTilesWrapper
         item
           Position1 = tp4SideA
           Position2 = tpCurve2LeftA
+          Layer = 2
         end
         item
           Position1 = tp4SideB
@@ -15676,6 +15679,7 @@ object TTilesWrapper
         item
           Position1 = tpCurve2LeftA
           Position2 = tp4SideC
+          Layer = 2
         end>
       Junctions = <
         item
@@ -15698,6 +15702,7 @@ object TTilesWrapper
         item
           Position1 = tp4SideD
           Position2 = tp3SideD
+          Layer = 2
         end
         item
           Position1 = tp4SideF
@@ -15710,6 +15715,7 @@ object TTilesWrapper
         item
           Position1 = tp4SideA
           Position2 = tp3SideD
+          Layer = 2
         end>
       Junctions = <
         item
@@ -16311,11 +16317,11 @@ object TTilesWrapper
           Position2 = tp4SideD
         end
         item
-          Position1 = 
+          Position1 = tpCenter
           Position2 = tp4SideC
         end
         item
-          Position1 = 
+          Position1 = tpCenter
           Position2 = tp4SideB
         end
         item
@@ -17525,10 +17531,12 @@ object TTilesWrapper
         item
           Position1 = tpCurve2LeftC
           Position2 = tp4SideC
+          Layer = 2
         end
         item
           Position1 = tpCurve2LeftC
           Position2 = tp4SideE
+          Layer = 2
         end>
       Junctions = <
         item
@@ -18018,7 +18026,7 @@ object TTilesWrapper
         end>
     end
     item
-      Code = 494
+      Code = 495
       LongName = 'Budapest'
       Category = 'Bu'
       Level = tlGray
@@ -18055,6 +18063,7 @@ object TTilesWrapper
     end
     item
       Code = 447
+      LongName = '447'
       Category = 'T'
       Level = tlYellow
       Connections = <
@@ -18074,6 +18083,7 @@ object TTilesWrapper
     end
     item
       Code = 497
+      LongName = '497'
       Category = 'T'
       Level = tlBrown
       Connections = <
@@ -18097,6 +18107,7 @@ object TTilesWrapper
     end
     item
       Code = 494
+      LongName = '494'
       Category = 'T'
       Level = tlGray
       Connections = <

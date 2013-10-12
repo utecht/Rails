@@ -1,15 +1,15 @@
 <Map tileOrientation="EW" letterOrientation="vertical" even="A">
-        <Hex name="A4" tile="-902" city="Dresden" value="10,20,30,40" orientation="4"/>
+        <Hex name="A4" tile="-902" city="Dresden" value="10,20,30,40" orientation="0"/>
         <Hex name="A6" tile="-1" cost="40"/>
         <Hex name="A8" tile="-1" />
         <Hex name="A10" tile="-1" cost="40"/>
         <Hex name="A12" tile="-24902" value="10,10,40,40"/>
         <Hex name="A18" tile="-37007" city="Krakau"/>
         <Hex name="A20" tile="-1"/>
-        <Hex name="A22" tile="-24903" value="20,20,40,40"/>
-        <Hex name="A24" tile="-902" city="Krakau" orientation="5" value="10,30,40,50" />
+        <Hex name="A22" tile="-24903" orientation="1" value="20,20,40,40"/>
+        <Hex name="A24" tile="-902" city="Krakau" orientation="1" value="10,30,40,50" />
         <Hex name="A26" tile="-901" orientation="1" value="10,30,40,50" />
-        <Hex name="B3" tile="-901" orientation="4" value="10,20,30,40"/>
+        <Hex name="B3" tile="-901" orientation="5" value="10,20,30,40"/>
         <Hex name="B5" tile="-10" city="Pilsen"/>
         <Hex name="B7" tile="0"/>
         <Hex name="B9" tile="-10" city="Prag"/>
@@ -70,13 +70,13 @@
         <Hex name="G12" tile="0"/>
         <Hex name="G14" tile="0"/>
         <Hex name="G16" tile="0" cost="20"/>
-        <Hex name="G18" tile="10" city="Szegedin" cost="20"/>
+        <Hex name="G18" tile="-10" city="Szegedin" cost="20"/>
         <Hex name="G20" tile="-1"/>
         <Hex name="G22" tile="0"/>
         <Hex name="G24" tile="0"/>
         <Hex name="G26" tile="-10" city="Kronstadt"/>
-        <Hex name="G28" tile="-901" orientation="1" value="10,30,40,50"/>
-        <Hex name="H1" tile="-902" orientation="3" value="10,30,50,70"/>
+        <Hex name="G28" tile="-901" orientation="2" value="10,30,40,50"/>
+        <Hex name="H1" tile="-902" orientation="5" value="10,30,50,70"/>
         <Hex name="H3" tile="-10" cit="Bozen" cost="40"/>
         <Hex name="H5" tile="0" cost="40"/>
         <Hex name="H7" tile="0" cost="40"/>
@@ -88,9 +88,9 @@
         <Hex name="H19" tile="0"/>
         <Hex name="H21" tile="0"/>
         <Hex name="H23" tile="-10" city="Hermannstadt"/>
-        <Hex name="H25" tile="-24904" value="20,20,60,60"/>
-        <Hex name="H27" tile="-901" city="Bukarest"/>
-        <Hex name="I2" tile="-901" city="Mailand" value="10,30,50,70" />
+        <Hex name="H25" tile="-24904" orientation="1" value="20,20,60,60"/>
+        <Hex name="H27" tile="-901" city="Bukarest" orientation="3" value="10,30,40,50"/>
+        <Hex name="I2" tile="-901" city="Mailand" orientation="4" value="10,30,50,70" />
         <Hex name="I8" tile="-37007" city="Triest"/>
         <Hex name="I10" tile="0"/>
         <Hex name="I12" tile="0"/>
@@ -99,7 +99,7 @@
         <Hex name="I18" tile="-1" cost="20"/>
         <Hex name="I20" tile="-1"/>
         <Hex name="I22" tile="-1"/>
-        <Hex name="J11" tile="-902" orientation="2" city="Sarajewo" value="10,10,50,50"/>
-        <Hex name="J13" tile="-902" orientation="2" value="10,10,50,50"/>
-        <Hex name="J15" tile="-902" orientation="2" value="10,10,50,50"/>
+        <Hex name="J11" tile="-902" orientation="4" city="Sarajewo" value="10,10,50,50"/>
+        <Hex name="J13" tile="-902" orientation="4" value="10,10,50,50"/>
+        <Hex name="J15" tile="-902" orientation="4" value="10,10,50,50"/>
 </Map>

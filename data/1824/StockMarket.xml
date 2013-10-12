@@ -1,5 +1,4 @@
 <StockMarket type="rectangular">
-<?xml version="1.0" encoding="UTF-8"?>
 	<UpOrDownRight />
 	<StockSpace name="A2" price="60" />
 	<StockSpace name="A3" price="50" />
