@@ -3,7 +3,7 @@
         <Hex name="A6" tile="-1" cost="40"/>
         <Hex name="A8" tile="-1" />
         <Hex name="A10" tile="-1" cost="40"/>
-        <Hex name="A12" tile="-24902" value="10,10,40,40"/>
+        <Hex name="A12" tile="-24902" orientation="1" value="10,10,40,40"/>
         <Hex name="A18" tile="-37007" city="Krakau"/>
         <Hex name="A20" tile="-1"/>
         <Hex name="A22" tile="-24903" orientation="1" value="20,20,40,40"/>
@@ -21,7 +21,7 @@
         <Hex name="B21" tile="0"/>
         <Hex name="B23" tile="-10" city="Lemberg"/>
         <Hex name="B25" tile="-2"/>
-        <Hex name="C6" tile="-24901" value="10,10,40,40" />
+        <Hex name="C6" tile="-24901" orientation="4" value="10,10,40,40" />
         <Hex name="C8" tile="0"/>
         <Hex name="C10" tile="-1" town="Budweis"/>
         <Hex name="C12" tile="-10" city="Brünn"/>
