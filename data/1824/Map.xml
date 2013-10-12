@@ -3,13 +3,13 @@
         <Hex name="A6" tile="-1" cost="40"/>
         <Hex name="A8" tile="-1" />
         <Hex name="A10" tile="-1" cost="40"/>
-        <Hex name="A12" tile="-3" value="10,40"/>
+        <Hex name="A12" tile="-24902" value="10,10,40,40"/>
         <Hex name="A18" tile="-37007" city="Krakau"/>
         <Hex name="A20" tile="-1"/>
-        <Hex name="A22" tile="-3"/>
+        <Hex name="A22" tile="-24903" value="20,20,40,40"/>
         <Hex name="A24" tile="-902" city="Krakau" orientation="5" value="10,30,40,50" />
         <Hex name="A26" tile="-901" orientation="1" value="10,30,40,50" />
-        <Hex name="B3" tile="-901" orientation=4" value="10,20,30,40"/>
+        <Hex name="B3" tile="-901" orientation="4" value="10,20,30,40"/>
         <Hex name="B5" tile="-10" city="Pilsen"/>
         <Hex name="B7" tile="0"/>
         <Hex name="B9" tile="-10" city="Prag"/>
@@ -21,7 +21,7 @@
         <Hex name="B21" tile="0"/>
         <Hex name="B23" tile="-10" city="Lemberg"/>
         <Hex name="B25" tile="-2"/>
-        <Hex name="C6" tile="-3"/>
+        <Hex name="C6" tile="-24901" value="10,10,40,40" />
         <Hex name="C8" tile="0"/>
         <Hex name="C10" tile="-1" town="Budweis"/>
         <Hex name="C12" tile="-10" city="Brünn"/>
@@ -44,7 +44,7 @@
         <Hex name="E6" tile="0"/>
         <Hex name="E8" tile="-10" city="Linz" cost="20"/>
         <Hex name="E10" tile="0" cost="20"/>
-        <Hex name="E12" tile="-3" city="Wien" cost="20"/>
+        <Hex name="E12" tile="-24031" city="Wien" cost="20"/>
         <Hex name="E14" tile="-10" city="Pressburg" cost="20"/>
         <Hex name="E16" tile="-2" cost="20"/>
         <Hex name="E18" tile="0"/>
@@ -57,7 +57,7 @@
         <Hex name="F11" tile="-2"/>
         <Hex name="F13" tile="0"/>
         <Hex name="F15" tile="0"/>
-        <Hex name="F17" tile="-3" city="Buda Pest" cost="20"/>
+        <Hex name="F17" tile="-24032" city="Buda Pest" cost="20"/>
         <Hex name="F19" tile="-1"/>
         <Hex name="F21" tile="0"/>
         <Hex name="F23" tile="-10" city="Klausenburg"/>
@@ -88,7 +88,7 @@
         <Hex name="H19" tile="0"/>
         <Hex name="H21" tile="0"/>
         <Hex name="H23" tile="-10" city="Hermannstadt"/>
-        <Hex name="H25" tile="-3"/>
+        <Hex name="H25" tile="-24904" value="20,20,60,60"/>
         <Hex name="H27" tile="-901" city="Bukarest"/>
         <Hex name="I2" tile="-901" city="Mailand" value="10,30,50,70" />
         <Hex name="I8" tile="-37007" city="Triest"/>
