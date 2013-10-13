@@ -16330,40 +16330,10 @@ object TTilesWrapper
         end>
       Junctions = <
         item
-          JunType = jtCity
-          Position = tp3SideE
+          JunType = jtHextupleCity
+          Position = tpCenter
           Revenue = 60
-          RevenuePosition = tpCenter
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideD
-          Revenue = 60
-          RevenuePosition = tpCenter
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideC
-          Revenue = 60
-          RevenuePosition = tpCenter
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideB
-          Revenue = 60
-          RevenuePosition = tpCenter
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideA
-          Revenue = 60
-          RevenuePosition = tpCenter
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideF
-          Revenue = 60
-          RevenuePosition = tpCenter
+          RevenuePosition = tpCenter  
         end>
     end
     item
@@ -16693,33 +16663,8 @@ object TTilesWrapper
         end>
       Junctions = <
         item
-          JunType = jtCity
-          Position = tp3SideE
-          Revenue = 80
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideD
-          Revenue = 80
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideC
-          Revenue = 80
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideB
-          Revenue = 80
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideA
-          Revenue = 80
-        end
-        item
-          JunType = jtCity
-          Position = tp3SideF
+          JunType = jtHextupleCity
+          Position = tpCenter
           Revenue = 80
         end>
     end
