@@ -4197,7 +4197,6 @@
    </Tile>
    <Tile colour="white" id="-37007" name="T">
       <Station id="city1" position="0" slots="1" type="City" />
-      <Station id="city2" position="151" type="" />
    </Tile>
    <Tile colour="white" id="-37008" name="X">
       <Station id="city1" position="0" slots="1" type="City" />

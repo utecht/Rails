@@ -23871,10 +23871,6 @@
             <junType>jtCity</junType>
             <position>tpCenter</position>
          </junction>
-         <junction>
-            <junType>jtNone</junType>
-            <position>tp1CornerC</position>
-         </junction>
       </junctions>
       <connections />
    </tile>
