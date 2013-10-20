@@ -31,69 +31,87 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
     private static final int NARROW_GAP = 1;
     private static final int WIDE_GAP = 3;
     // Bits for specifying where to apply wide gaps
-    private static final int WIDE_LEFT = 1;
-    private static final int WIDE_RIGHT = 2;
-    private static final int WIDE_TOP = 4;
-    private static final int WIDE_BOTTOM = 8;
+    protected static final int WIDE_LEFT = 1;
+    protected static final int WIDE_RIGHT = 2;
+    protected static final int WIDE_TOP = 4;
+    protected static final int WIDE_BOTTOM = 8;
 
     private static final Color buyableColour = new Color (0, 128, 0);
     private static final Color soldColour = new Color (128, 128, 128);
     private static final Color defaultColour = Color.BLACK;
 
-    private JPanel statusPanel;
-    private JPanel buttonPanel;
+    protected JPanel statusPanel;
+    protected JPanel buttonPanel;
 
-    private GridBagLayout gb;
-    private GridBagConstraints gbc;
+    protected GridBagLayout gb;
+    protected GridBagConstraints gbc;
 
     // Grid elements per function
-    private Caption itemName[];
-    private ClickField itemNameButton[];
-    private int itemNameXOffset, itemNameYOffset;
-    private Field basePrice[];
-    private int basePriceXOffset, basePriceYOffset;
-    private Field minBid[];
-    private int minBidXOffset, minBidYOffset;
-    private Field bidPerPlayer[][];
-    private int bidPerPlayerXOffset, bidPerPlayerYOffset;
-    private Field playerBids[];
-    private int playerBidsXOffset, playerBidsYOffset;
-    private Field playerFree[];
-    private int playerFreeCashXOffset, playerFreeCashYOffset;
-    private Field info[];
-    private int infoXOffset, infoYOffset;
-    private Field itemStatus[]; // Remains invisible, only used for status tooltip
+    protected Caption itemName[];
+    protected ClickField itemNameButton[];
+    protected int itemNameXOffset;
 
-    private int playerCaptionXOffset, upperPlayerCaptionYOffset, lowerPlayerCaptionYOffset;
-    private Cell[] upperPlayerCaption;
-    private Cell[] lowerPlayerCaption;
-    private JComponent[][] fields;
+    protected int itemNameYOffset;
+    protected Field basePrice[];
+    protected int basePriceXOffset;
 
-    private ActionButton bidButton;
-    private ActionButton buyButton;
-    private JSpinner bidAmount;
-    private SpinnerNumberModel spinnerModel;
-    private ActionButton passButton;
+    protected int basePriceYOffset;
+    protected Field minBid[];
+    protected int minBidXOffset;
 
-    private ImageIcon infoIcon = null;
+    protected int minBidYOffset;
+    protected Field bidPerPlayer[][];
+    protected int bidPerPlayerXOffset;
 
-    private int np; // Number of players
-    private int ni; // Number of start items
-    private List<Player> players;
-    private StartItem[] items;
-    private StartItemAction[] actionableItems;
-    private StartPacket packet;
-    private int[] crossIndex;
-    private StartRound round;
-    private GameUIManager gameUIManager;
+    protected int bidPerPlayerYOffset;
+    protected Field playerBids[];
+    protected int playerBidsXOffset;
+
+    protected int playerBidsYOffset;
+    protected Field playerFree[];
+    protected int playerFreeCashXOffset;
+
+    protected int playerFreeCashYOffset;
+    protected Field info[];
+    protected int infoXOffset;
+
+    protected int infoYOffset;
+    protected Field itemStatus[]; // Remains invisible, only used for status tooltip
+
+    protected int playerCaptionXOffset;
+
+    protected int upperPlayerCaptionYOffset;
+
+    protected int lowerPlayerCaptionYOffset;
+    protected Cell[] upperPlayerCaption;
+    protected Cell[] lowerPlayerCaption;
+    protected JComponent[][] fields;
+
+    protected ActionButton bidButton;
+    protected ActionButton buyButton;
+    protected JSpinner bidAmount;
+    protected SpinnerNumberModel spinnerModel;
+    protected ActionButton passButton;
+
+    protected ImageIcon infoIcon = null;
+
+    protected int np; // Number of players
+    protected int ni; // Number of start items
+    protected List<Player> players;
+    protected StartItem[] items;
+    protected StartItemAction[] actionableItems;
+    protected StartPacket packet;
+    protected int[] crossIndex;
+    protected StartRound round;
+    protected GameUIManager gameUIManager;
 
     // For the non-modal dialog to ask for a company starting share price.
     protected JDialog currentDialog = null;
     protected PossibleAction currentDialogAction = null;
     protected int[] startPrices = null;
 
-    private StartItem si;
-    private JComponent f;
+    protected StartItem si;
+    protected JComponent f;
 
     /** @see StartItem.statusName */
     public static final String[] itemStatusTextKeys =
@@ -108,12 +126,12 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
         PossibleActions.getInstance();
     protected PossibleAction immediateAction = null;
 
-    private final ButtonGroup itemGroup = new ButtonGroup();
-    private ClickField dummyButton; // To be selected if none else is.
+    protected final ButtonGroup itemGroup = new ButtonGroup();
+    protected ClickField dummyButton; // To be selected if none else is.
 
-    private boolean includeBuying;
-    private boolean includeBidding;
-    private boolean showBasePrices;
+    protected boolean includeBuying;
+    protected boolean includeBidding;
+    protected boolean showBasePrices;
 
     /* Keys of dialogs owned by this class */
     public static final String COMPANY_START_PRICE_DIALOG = "CompanyStartPrice";
@@ -390,7 +408,7 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
 
     }
 
-    private void addField(JComponent comp, int x, int y, int width, int height,
+    protected void addField(JComponent comp, int x, int y, int width, int height,
             int wideGapPositions) {
 
         int padTop, padLeft, padBottom, padRight;
@@ -801,7 +819,7 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
                 status == StartItem.BUYABLE ? buyableColour : defaultColour);
     }
 
-    private String getStartItemDescription (StartItem item) {
+    protected String getStartItemDescription (StartItem item) {
         StringBuffer b = new StringBuffer("<html>");
         b.append (item.getPrimary().toString());
         if (item.getPrimary() instanceof PrivateCompany) {
@@ -840,7 +858,7 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
         return b.toString();
     }
 
-    private ImageIcon createInfoIcon() {
+    protected ImageIcon createInfoIcon() {
         return RailsIcon.INFO.smallIcon;
     }
 

@@ -33,8 +33,9 @@ public class StartItem {
     protected int numberOfPlayers;
     protected MoneyModel[] bids;
     protected MoneyModel minimumBid;
+    protected MoneyModel actualPrice;
 
-    // Status info for the UI ==> MOVED TO BuyOrBidStartItem
+       // Status info for the UI ==> MOVED TO BuyOrBidStartItem
     // TODO REDUNDANT??
     /**
      * Status of the start item (buyable? biddable?) regardless whether the
@@ -107,6 +108,7 @@ public class StartItem {
         status = new IntegerState(name + "_status");
         minimumBid = new MoneyModel(name + "_minimumBid");
         minimumBid.setOption(MoneyModel.SUPPRESS_ZERO);
+        actualPrice = new MoneyModel(name + "_actualPrice");
         lastBidderIndex = new IntegerState(name + "_highestBidder", -1);
 
         if (startItemMap == null)
@@ -487,6 +489,24 @@ public class StartItem {
         return minimumBid;
     }
     
+    /**
+     * @return the actualPrice
+     */
+    public int getActualPrice() {
+        return actualPrice.intValue();
+    }
+
+    /**
+     * @param actualPrice the actualPrice to set
+     */
+    public void setActualPrice(int price) {
+        actualPrice.set(price);
+    }
+
+    public MoneyModel getActualPriceModel() {
+        return actualPrice;
+    }
+
     public void setNoBidsReaction(NoBidsReaction action) {
         this.noBidsReaction = action;
     }
