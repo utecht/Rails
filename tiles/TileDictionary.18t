@@ -17321,9 +17321,6 @@ object TTilesWrapper
       Junctions = <
         item
           JunType = jtCity
-        end
-        item
-          Position = tp1CornerC
         end>
     end
     item
