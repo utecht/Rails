@@ -216,39 +216,19 @@ public class StartRound_1837 extends StartRound {
         String shareCompName = "";
 
         while (true) {
-            if (!boughtItem.setSharePriceOnly()) {
-                if (item.getStatus() != StartItem.BUYABLE) {
-                    errMsg = LocalText.getText("NotForSale");
-                    break;
-                }
+           if (item.getStatus() != StartItem.BUYABLE) {
+                errMsg = LocalText.getText("NotForSale");
+                break;
+           }
 
-                price = item.getBasePrice();
-                if (item.getBid() > price) price = item.getBid();
+           price = item.getActualPrice();
 
-                if (player.getFreeCash() < price) {
-                    errMsg = LocalText.getText("NoMoney");
-                    break;
-                }
-            } else {
-                price = item.getBid();
-            }
-
-            if (boughtItem.hasSharePriceToSet()) {
-                shareCompName = boughtItem.getCompanyToSetPriceFor();
-                sharePrice = boughtItem.getAssociatedSharePrice();
-                if (sharePrice == 0) {
-                    errMsg =
-                        LocalText.getText("NoSharePriceSet", shareCompName);
-                    break;
-                }
-                if ((stockMarket.getStartSpace(sharePrice)) == null) {
-                    errMsg =
-                        LocalText.getText("InvalidStartPrice",
-                                Bank.format(sharePrice),
-                                shareCompName );
-                    break;
-                }
-            }
+           if (player.getFreeCash() < price) {
+                errMsg = LocalText.getText("NoMoney");
+                break;
+           }
+            
+            
             break;
         }
 
@@ -273,6 +253,7 @@ public class StartRound_1837 extends StartRound {
 
         auctionItemState.set(null);
         numPasses.set(0);
+        numRoundsPassed.set(0);
 
         return true;
 
