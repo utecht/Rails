@@ -1,4 +1,3 @@
-/* $Header: /Users/blentz/rails_rcs/cvs/18xx/rails/game/StartRound_1835.java,v 1.26 2010/03/30 21:59:03 evos Exp $ */
 package rails.game.specific._1837;
 
 import java.util.ArrayList;
@@ -11,11 +10,12 @@ import rails.game.action.*;
 import rails.game.state.IntegerState;
 
 /**
- * Implements an 1835-style startpacket sale.
+ * Implements an 1837-style startpacket sale.
  */
 public class StartRound_1837 extends StartRound {
 
-
+    protected IntegerState numRoundsPassed = new IntegerState("StartRoundRoundsPassed");
+    
     /**
      * Constructor, only to be used in dynamic instantiation.
      */
@@ -49,14 +49,14 @@ public class StartRound_1837 extends StartRound {
     @Override
     public boolean setPossibleActions() {
 
-        List<StartItem> startItems = startPacket.getItems();
+        List<StartItem> startItems =  startPacket.getItems();
         List<StartItem> buyableItems = new ArrayList<StartItem>();
         int row;
         int column;
         boolean buyable;
-        int items = 0;
         int minRow = 0;
-
+        boolean[][] soldStartItems = new boolean [3][6];
+                
         /*
          * First, mark which items are buyable. Once buyable, they always remain
          * so until bought, so there is no need to check if an item is still
@@ -65,25 +65,40 @@ public class StartRound_1837 extends StartRound {
         for (StartItem item : startItems) {
             buyable = false;
 
+            item.setActualPrice(item.getBasePrice());
+            column= item.getColumn();
+            row = item.getRow();
+            
             if (item.isSold()) {
                 // Already sold: skip but set watermarks
 
+                
+                if (column ==1) {
+                    soldStartItems[0][row-1] = true;
+                } else {
+                    if (column ==2) {
+                        soldStartItems[1][row-1] = true;
+                    } else {
+                        soldStartItems[2][row-1] = true;
+                    }
+                }
+                
            } else {
-                column= item.getColumn();
-                row = item.getRow();
-                if (minRow == 0) minRow = row;
+                if (minRow == 0) {
+                    minRow = row;
+                     }
                 if (row == minRow) {
                     // Allow all items in the top row.
                     buyable = true;
-                } else {
-                    // Allow the first item in the next row of a column where the items in lower 
+                } else { 
+                    // Allow the first item in the next row of a column where the items in higher 
                     //rows have been bought.
-                    // top row has only one item.
+                    if (soldStartItems[column-1][row-2] == true) {                    
                     buyable = true;
+                    }
                 }
-            }
+           }
             if (buyable) {
-                items++;
                 item.setStatus(StartItem.BUYABLE);
                 buyableItems.add(item);
             }
@@ -102,39 +117,19 @@ public class StartRound_1837 extends StartRound {
             int cashToSpend = currentPlayer.getCash();
 
             for (StartItem item : buyableItems) {
-
-                if (item.getBasePrice() <= cashToSpend) {
+                //if all players passed in a round, the itemprice gets reduced by 10 per round of completed passing
+                int reducedPrice = (item.getBasePrice()- (10 * numRoundsPassed.intValue()));
+                
+                item.setActualPrice(reducedPrice);
+                if (item.getActualPrice() <= cashToSpend) {
                     /* Player does have the cash */
                     possibleActions.add(new BuyStartItem(item,
-                            item.getBasePrice(), false));
+                            item.getActualPrice(), false));
                 }
             }
 
-            if (possibleActions.isEmpty()) {
-                String message =
-                    LocalText.getText("CannotBuyAnything",
-                            currentPlayer.getName());
-                ReportBuffer.add(message);
-                //DisplayBuffer.add(message);
-                numPasses.add(1);
-                if (numPasses.intValue() >= numPlayers) {
-                    /*
-                     * No-one has enough cash left to buy anything, so close the
-                     * Start Round.
-                     */
-                    numPasses.set(0);
-                    finishRound();
-                    gameManager.getCurrentRound().setPossibleActions();
-
-                    // This code may be called recursively.
-                    // Jump out as soon as we have something to do
-                    if (!possibleActions.isEmpty()) break;
-
-                    return false;
-                }
-                setNextPlayer();
-            }
-        }
+            // setNextPlayer();
+      }
 
         /* Pass is always allowed */
         possibleActions.add(new NullAction(NullAction.PASS));
@@ -188,20 +183,112 @@ public class StartRound_1837 extends StartRound {
 
         if (numPasses.intValue() >= numPlayers) {
             // All players have passed.
+            // The next open top row papers in either column will be reduced by price 
+            // TBD
             ReportBuffer.add(LocalText.getText("ALL_PASSED"));
             numPasses.set(0);
-            //gameManager.nextRound(this);
-            finishRound();
+            numRoundsPassed.add(1);
+            
+            //finishRound(); This Startround cant be finished until all Items have sold.
+            setNextPlayer();
         } else {
             setNextPlayer();
         }
 
         return true;
     }
+    
+    
 
+    /* (non-Javadoc)
+     * @see rails.game.StartRound#buy(java.lang.String, rails.game.action.BuyStartItem)
+     */
+    @Override
+    protected boolean buy(String playerName, BuyStartItem boughtItem) {
+        // If the player buys a price reduced paper the other price reduced papers need to be set back to the 
+        // base price
+        StartItem item = boughtItem.getStartItem();
+        int lastBid = item.getBid();
+        String errMsg = null;
+        Player player = getCurrentPlayer();
+        int price = 0;
+        int sharePrice = 0;
+        String shareCompName = "";
+
+        while (true) {
+            if (!boughtItem.setSharePriceOnly()) {
+                if (item.getStatus() != StartItem.BUYABLE) {
+                    errMsg = LocalText.getText("NotForSale");
+                    break;
+                }
+
+                price = item.getBasePrice();
+                if (item.getBid() > price) price = item.getBid();
+
+                if (player.getFreeCash() < price) {
+                    errMsg = LocalText.getText("NoMoney");
+                    break;
+                }
+            } else {
+                price = item.getBid();
+            }
+
+            if (boughtItem.hasSharePriceToSet()) {
+                shareCompName = boughtItem.getCompanyToSetPriceFor();
+                sharePrice = boughtItem.getAssociatedSharePrice();
+                if (sharePrice == 0) {
+                    errMsg =
+                        LocalText.getText("NoSharePriceSet", shareCompName);
+                    break;
+                }
+                if ((stockMarket.getStartSpace(sharePrice)) == null) {
+                    errMsg =
+                        LocalText.getText("InvalidStartPrice",
+                                Bank.format(sharePrice),
+                                shareCompName );
+                    break;
+                }
+            }
+            break;
+        }
+
+        if (errMsg != null) {
+            DisplayBuffer.add(LocalText.getText("CantBuyItem",
+                    playerName,
+                    item.getName(),
+                    errMsg ));
+            return false;
+        }
+
+        moveStack.start(false);
+
+        assignItem(player, item, price, sharePrice);
+
+        // Set priority (only if the item was not auctioned)
+        // ASSUMPTION: getting an item in auction mode never changes priority
+        if (lastBid == 0) {
+            gameManager.setPriorityPlayer();
+        }
+        setNextPlayer();
+
+        auctionItemState.set(null);
+        numPasses.set(0);
+
+        return true;
+
+    }
+
+/*
+    private boolean itemsBuyableOnRow(int i) {
+        for (int j=0; j<3; j++) {
+            if (soldStartItems[j][i]) return true;
+        }
+        return false;
+    }
+*/
     @Override
     public String getHelp() {
-        return "1835 Start Round help text";
+        return "1837 Start Round help text";
     }
 
 }

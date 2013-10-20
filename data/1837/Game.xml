@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <ComponentManager>
-        <Component name="GameManager" class="rails.game.GameManager">
-        <!--Component name="GameManager" class="rails.game.specific._1837.GameManager_1837"-->
+        <Component name="GameManager" class="rails.game.specific._1837.GameManager_1837">
                 <Game name="1837"/>
                 <GameOption name="RouteAwareness" values="Highlight,Deactivate" default="Highlight"/>
                 <GameOption name="RevenueCalculation" values="Suggest,Deactivate" default="Highlight"/>
@@ -22,10 +21,11 @@
                                 <EmergencyTrainBuying mustBuyCheapestTrain="no" mayAlwaysBuyNewTrain="yes" mayBuyFromCompany="yes"/>
                         </OperatingRound>
                 </GameParameters>
-                <!--GuiClasses>
-                        <StatusWindow class="rails.ui.swing.gamespecific._1837.StatusWindow_1837"/>
-                        <GameUIManager class="rails.ui.swing.gamespecific._1837.GameUIManager_1837"/>
-                </GuiClasses-->
+                <GuiClasses>
+                    <StartRoundWindow class="rails.ui.swing.gamespecific._1837.StartRoundWindow_1837"/>
+                    <!-- StatusWindow class="rails.ui.swing.gamespecific._1837.StatusWindow_1837"/-->
+                    <!-- <GameUIManager class="rails.ui.swing.gamespecific._1837.GameUIManager_1837"/-->
+                </GuiClasses>
                 <EndOfGame>
                         <BankBreaks limit="0" finish="currentOR"/>
                         <!-- "Runs out"; when "broken", -1 is the limit -->
