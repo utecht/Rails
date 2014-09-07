@@ -69,12 +69,12 @@
 	
 	<!-- Green tiles -->
 	<Tile id="14" quantity="4">
-		<Upgrade id="63" hex="-B19,C14,F17,L13,N3,O18,P9"/>
-		<Upgrade id="125" hex="B19,C14,F17,L13,N3,O18,P9"/>
+		<Upgrade id="63"/>
+		<Upgrade id="125"/>
 	</Tile>
 	<Tile id="15" quantity="4">
-		<Upgrade id="63" hex="-B19,C14,F17,L13,N3,O18,P9"/>
-		<Upgrade id="125" hex="B19,C14,F17,L13,N3,O18,P9"/>
+		<Upgrade id="63"/>
+		<Upgrade id="125"/>
 	</Tile>
 	<Tile id="16" quantity="1">
 		<Upgrade id="43,70" />
@@ -119,8 +119,8 @@
 		<Upgrade id="122" />
 	</Tile>
 	<Tile id="121" quantity="2">
-		<Upgrade id="126" hex="F15"/>
-		<Upgrade id="127" hex="M4"/>
+		<Upgrade id="126"/>
+		<Upgrade id="127"/>
 	</Tile>
 
 	<!-- Brown tiles -->
@@ -135,19 +135,19 @@
 	<Tile id="47" quantity="2" />
 	<Tile id="63" quantity="4" />
 	<Tile id="64" quantity="1">
-		<Upgrade id="123" hex="L15"/>
+		<Upgrade id="123"/>
 	</Tile>
 	<Tile id="65" quantity="1">
-		<Upgrade id="123" hex="L15"/>
+		<Upgrade id="123"/>
 	</Tile>
 	<Tile id="66" quantity="1">
-		<Upgrade id="123" hex="L15"/>
+		<Upgrade id="123"/>
 	</Tile>
 	<Tile id="67" quantity="1">
-		<Upgrade id="123" hex="L15"/>
+		<Upgrade id="123"/>
 	</Tile>
 	<Tile id="68" quantity="1">
-		<Upgrade id="123" hex="L15"/>
+		<Upgrade id="123"/>
 	</Tile>
 	<Tile id="70" quantity="1" />
 	<Tile id="122" quantity="1">
