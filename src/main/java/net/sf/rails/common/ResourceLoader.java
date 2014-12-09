@@ -1,6 +1,7 @@
 package net.sf.rails.common;
 
 import java.io.InputStream;
+import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,14 @@ public final class ResourceLoader {
 
     public static InputStream getInputStream(String filename, String directory) {
         String fullPath = directory + SEPARATOR + fixFilename(filename);
-        log.debug("Locate fullPath (updated) =" + fullPath);
+        log.debug("Locate fullPath (as Stream) =" + fullPath);
         return ResourceLoader.class.getClassLoader().getResourceAsStream(fullPath);
+    }
+    
+    public static URL getURL(String filename, String directory) {
+        String fullPath = directory + SEPARATOR + fixFilename(filename);
+        log.debug("Locate fullPath (as URL) =" + fullPath);
+        return ResourceLoader.class.getClassLoader().getResource(fullPath);
     }
 
     /**

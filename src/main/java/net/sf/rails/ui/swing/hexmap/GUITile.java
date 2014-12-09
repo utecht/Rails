@@ -42,13 +42,14 @@ public class GUITile {
 
             double radians = MapOrientation.rotationInRadians(tile, rotation);
             HexPoint center = new HexPoint(
-                    tileImage.getWidth() * SVG_X_CENTER_LOC * tileScale,
-                    tileImage.getHeight()* SVG_Y_CENTER_LOC * tileScale
+                    tileImage.getWidth() * SVG_X_CENTER_LOC * tileScale * 75/392,
+                    tileImage.getHeight()* SVG_Y_CENTER_LOC * tileScale * 75/392
             );
             HexPoint difference = HexPoint.difference(origin, center);
             AffineTransform af = AffineTransform.getTranslateInstance(difference.getX(), difference.getY());
             af.rotate(radians, center.getX(), center.getY());
-            af.scale(tileScale, tileScale);
+            double scale = tileScale * imageLoader.getZoomFactor(zoomStep) * 75 / 392;
+            af.scale(scale, scale);
 
             AffineTransformOp aop = new AffineTransformOp(af,
                     GUIGlobals.getRenderingHints());
