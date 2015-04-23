@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="libs/main/designgridlayout-1.11/designgridlayout-1.11.jar"/>
 	<classpathentry kind="lib" path="libs/main/df_1.1.1/docking-frames-common.jar"/>
 	<classpathentry kind="lib" path="libs/main/df_1.1.1/docking-frames-core.jar"/>
+	<classpathentry kind="lib" path="libs/main/gson_2.3.1/gson-2.3.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
