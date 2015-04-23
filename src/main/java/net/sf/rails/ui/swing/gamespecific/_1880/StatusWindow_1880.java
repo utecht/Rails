@@ -8,22 +8,18 @@ import java.awt.BorderLayout;
 import net.sf.rails.ui.swing.GameUIManager;
 import net.sf.rails.ui.swing.StatusWindow;
 
-/**
- * @author Martin
- * @date 07.05.2011
- */
 public class StatusWindow_1880 extends StatusWindow {
 
     private static final long serialVersionUID = 1L;
     private ParSlotsPanel parSlotsPanel;
     
-/*    public StatusWindow_1880() {
-        super();
-    }*/
+    public StatusWindow_1880(GameUIManager gameUIManager) {
+       super(gameUIManager);
+    }
     
-    
-    public void init(GameUIManager gameUIManager) {
-        super.init(gameUIManager);
+    @Override
+    public void init() {
+        super.init();
         
         parSlotsPanel = new ParSlotsPanel();
         parSlotsPanel.init(gameUIManager);

@@ -5,29 +5,33 @@ import java.util.List;
 import rails.game.action.DiscardTrain;
 import rails.game.specific._1835.FoldIntoPrussian;
 import net.sf.rails.common.LocalText;
-import net.sf.rails.game.*;
+import net.sf.rails.game.Company;
+import net.sf.rails.game.PublicCompany;
+import net.sf.rails.game.Round;
 import net.sf.rails.game.special.ExchangeForShare;
-import net.sf.rails.game.specific._1835.*;
+import net.sf.rails.game.specific._1835.GameManager_1835;
+import net.sf.rails.game.specific._1835.PrussianFormationRound;
 import net.sf.rails.ui.swing.GameUIManager;
 import net.sf.rails.ui.swing.StatusWindow;
-import net.sf.rails.ui.swing.elements.*;
+import net.sf.rails.ui.swing.elements.CheckBoxDialog;
+import net.sf.rails.ui.swing.elements.ConfirmationDialog;
+import net.sf.rails.ui.swing.elements.NonModalDialog;
 
 import com.google.common.collect.Iterables;
 
 
 public class StatusWindow_1835 extends StatusWindow {
-
-    PublicCompany prussian;
-
     private static final long serialVersionUID = 1L;
 
-    public StatusWindow_1835() {
-        super();
-    }
+    private PublicCompany prussian;
+
+    public StatusWindow_1835(GameUIManager gameUIManager) {
+        super(gameUIManager);
+     }
 
     @Override
-    public void init (GameUIManager gameUIManager) {
-        super.init(gameUIManager);
+    public void init() {
+        super.init();
         prussian = gameUIManager.getRoot().getCompanyManager().getPublicCompany(GameManager_1835.PR_ID);
     }
 

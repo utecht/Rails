@@ -10,7 +10,6 @@ import java.util.Locale;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -18,12 +17,12 @@ import javax.swing.SwingUtilities;
 
 import net.sf.rails.common.Config;
 import net.sf.rails.common.LocalText;
+import net.sf.rails.ui.swing.GameUIManager;
 import net.sf.rails.ui.swing.SplashWindow;
 import net.sf.rails.util.SystemOS;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import bibliothek.gui.DockController;
 import bibliothek.gui.DockStation;
@@ -62,7 +61,7 @@ import bibliothek.gui.dock.support.menu.SeparatingMenuPiece;
  * @author Frederick Weld
  *
  */
-public abstract class DockingFrame extends JFrame {
+public abstract class DockingFrame extends RailsFrame {
     public static enum DockableProperty { standard, closeable, initially_hidden };
     private static final long serialVersionUID = 1L;
     private static final String layoutDirectoryName = "DockableLayout";
@@ -87,8 +86,9 @@ public abstract class DockingFrame extends JFrame {
      * Decision whether docking framework should be activated for a frame
      * has to be done at the beginning as later switching is not supported
      */
-    protected DockingFrame(boolean isDockingFrameworkEnabled, SplashWindow splashWindow) {
-
+    protected DockingFrame(GameUIManager gameUIManager, boolean isDockingFrameworkEnabled, SplashWindow splashWindow) {
+        super(gameUIManager);
+        
         this.isDockingFrameworkEnabled = isDockingFrameworkEnabled;
         if (!isDockingFrameworkEnabled) return;
 

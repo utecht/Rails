@@ -244,15 +244,8 @@ public class GameUIManager implements DialogOwner {
         try {
             Class<? extends StatusWindow> statusWindowClass =
                 Class.forName(statusWindowClassName).asSubclass(StatusWindow.class);
-            statusWindow = statusWindowClass.newInstance();
-
-            //            GraphicsEnvironment ge = GraphicsEnvironment.
-            //            getLocalGraphicsEnvironment();
-            //            GraphicsDevice[] gs = ge.getScreenDevices();
-            //            log.debug("ScreenDevices = " + Arrays.toString(gs));
-            //            statusWindow = statusWindowClass.getConstructor(GraphicsConfiguration.class).newInstance(gs[1].getDefaultConfiguration());
-
-            statusWindow.init(this);
+            statusWindow = statusWindowClass.getConstructor(GameUIManager.class).newInstance(this);
+            statusWindow.init();
         } catch (Exception e) {
             log.error("Cannot instantiate class " + statusWindowClassName, e);
             System.exit(1);
@@ -459,8 +452,8 @@ public class GameUIManager implements DialogOwner {
                     try {
                         Class<? extends StartRoundWindow> startRoundWindowClass =
                             Class.forName(startRoundWindowClassName).asSubclass(StartRoundWindow.class);
-                        startRoundWindow = startRoundWindowClass.newInstance();
-                        startRoundWindow.init(startRound, this);
+                        startRoundWindow = startRoundWindowClass.getConstructor(GameUIManager.class).newInstance(this);
+                        startRoundWindow.init(startRound);
                     } catch (Exception e) {
                         log.error("Cannot instantiate class " + startRoundWindowClassName, e);
                         System.exit(1);

@@ -23,6 +23,7 @@ import net.sf.rails.common.ReportBuffer;
 import net.sf.rails.game.state.ChangeStack;
 import net.sf.rails.sound.SoundManager;
 import net.sf.rails.ui.swing.elements.ActionButton;
+import net.sf.rails.ui.swing.elements.RailsFrame;
 import net.sf.rails.ui.swing.elements.RailsIcon;
 
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ import rails.game.action.GameAction;
 /**
  * ReportWindow displays the game history
  */
-public class ReportWindow extends JFrame implements 
+public class ReportWindow extends RailsFrame implements 
     ActionListener, HyperlinkListener, ReportBuffer.Observer {
    
     private static final long serialVersionUID = 1L;
@@ -42,7 +43,6 @@ public class ReportWindow extends JFrame implements
     private static Logger log =
             LoggerFactory.getLogger(ReportWindow.class);
 
-    private final GameUIManager gameUIManager;
     private final ReportBuffer reportBuffer;
     private final ChangeStack changeStack;
 
@@ -62,7 +62,7 @@ public class ReportWindow extends JFrame implements
     
 
     public ReportWindow(GameUIManager gameUIManager) {
-        this.gameUIManager = gameUIManager;
+        super(gameUIManager);
         timeWarpMode = false;
 
         reportBuffer = gameUIManager.getRoot().getReportManager().getReportBuffer();

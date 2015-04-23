@@ -8,6 +8,7 @@ package net.sf.rails.ui.swing.gamespecific._1880;
 import javax.swing.JDialog;
 
 import net.sf.rails.common.LocalText;
+import net.sf.rails.ui.swing.GameUIManager;
 import net.sf.rails.ui.swing.StartRoundWindow;
 import net.sf.rails.ui.swing.elements.NonModalDialog;
 import net.sf.rails.ui.swing.elements.RadioButtonDialog;
@@ -36,13 +37,10 @@ public class StartRoundWindow_1880 extends StartRoundWindow {
     private static final String[] parSlots = {"1", "2", "3", "4"};
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @param round
-     * @param parent
-     */
-    public StartRoundWindow_1880() {
-    }
 
+    public StartRoundWindow_1880(GameUIManager gameUIManager)  {
+        super(gameUIManager);
+    }
 
     @Override
     public boolean processImmediateAction() {

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package net.sf.rails.ui.swing.gamespecific._1837;
 
 import java.util.List;
@@ -25,26 +22,22 @@ import net.sf.rails.ui.swing.elements.CheckBoxDialog;
 import net.sf.rails.ui.swing.elements.ConfirmationDialog;
 import net.sf.rails.ui.swing.elements.NonModalDialog;
 
-
-/**
- * @author martin
- * @date 27.07.2014 @time 12:49:01
- */
 public class StatusWindow_1837 extends StatusWindow {
 
-        PublicCompany suedbahn;
-        PublicCompany kuk;
-        PublicCompany hungary;
+        private PublicCompany suedbahn;
+        private PublicCompany kuk;
+        private PublicCompany hungary;
 
         private static final long serialVersionUID = 1L;
 
-        public StatusWindow_1837() {
-            super();
-        }
+        public StatusWindow_1837(GameUIManager gameUIManager) {
+            super(gameUIManager);
+         }
+         
 
         @Override
-        public void init (GameUIManager gameUIManager) {
-            super.init(gameUIManager);
+        public void init() {
+            super.init();
             suedbahn = gameUIManager.getRoot().getCompanyManager().getPublicCompany("Sd");
             kuk = gameUIManager.getRoot().getCompanyManager().getPublicCompany("KK");
             hungary = gameUIManager.getRoot().getCompanyManager().getPublicCompany("Ug");

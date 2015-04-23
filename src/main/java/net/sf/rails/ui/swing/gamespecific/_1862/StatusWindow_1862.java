@@ -16,10 +16,10 @@ import net.sf.rails.util.Util;
 public class StatusWindow_1862 extends StatusWindow {
 
     private static final long serialVersionUID = 1L;
-
-    public StatusWindow_1862() {
-        super();
-    }
+    
+    public StatusWindow_1862(GameUIManager gameUIManager) {
+        super(gameUIManager);
+     }
 
     @Override
     public void updateStatus(boolean myTurn) {

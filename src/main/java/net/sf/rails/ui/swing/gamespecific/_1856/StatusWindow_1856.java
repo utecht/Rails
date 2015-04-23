@@ -17,9 +17,9 @@ public class StatusWindow_1856 extends StatusWindow {
 
     private static final long serialVersionUID = 1L;
 
-    public StatusWindow_1856() {
-        super();
-    }
+    public StatusWindow_1856(GameUIManager gameUIManager) {
+        super(gameUIManager);
+     }
 
     @Override
     public void updateStatus(boolean myTurn) {

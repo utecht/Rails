@@ -28,7 +28,7 @@ import com.google.common.collect.Iterables;
 /**
  * This displays the Auction Window
  */
-public class StartRoundWindow extends JFrame
+public class StartRoundWindow extends RailsFrame
 implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
 
     private static final long serialVersionUID = 1L;
@@ -91,7 +91,6 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
     private StartPacket packet;
     private int[] crossIndex;
     protected StartRound round;
-    private GameUIManager gameUIManager;
 
     // For the non-modal dialog to ask for a company starting share price.
     protected JDialog currentDialog = null;
@@ -125,14 +124,17 @@ implements ActionListener, KeyListener, ActionPerformer, DialogOwner {
 
     protected static Logger log =
             LoggerFactory.getLogger(StartRoundWindow.class);
+    
+    
+    public StartRoundWindow(GameUIManager gameUIManager) {
+        super(gameUIManager);
+    }
 
-    public void init(StartRound round, GameUIManager parent) {
-        //super();
+    public void init(StartRound round) {
         this.round = round;
         includeBidding = round.hasBidding();
         includeBuying = round.hasBuying();
         showBasePrices = round.hasBasePrices();
-        gameUIManager = parent;
         possibleActions = gameUIManager.getGameManager().getPossibleActions();
                 
         setTitle(LocalText.getText("START_ROUND_TITLE"));

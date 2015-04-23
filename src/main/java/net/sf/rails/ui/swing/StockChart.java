@@ -1,20 +1,33 @@
-/* $Header: /Users/blentz/rails_rcs/cvs/18xx/rails/ui/swing/StockChart.java,v 1.7 2009/10/30 21:53:03 evos Exp $*/
 package net.sf.rails.ui.swing;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import net.sf.rails.game.StockSpace;
 import net.sf.rails.ui.swing.elements.GUIStockSpace;
+import net.sf.rails.ui.swing.elements.RailsFrame;
 
 
 /**
  * This class displays the StockMarket Window.
  */
 
-public class StockChart extends JFrame implements KeyListener {
+public class StockChart extends RailsFrame implements KeyListener {
     private static final long serialVersionUID = 1L;
     private JPanel stockPanel;
     private Box horLabels, verLabels;
@@ -22,11 +35,9 @@ public class StockChart extends JFrame implements KeyListener {
     private GridLayout stockGrid;
     private GridBagConstraints gc;
     private StockSpace[][] market;
-    private GameUIManager gameUIManager;
 
     public StockChart(GameUIManager gameUIManager) {
-        super();
-        this.gameUIManager = gameUIManager;
+        super(gameUIManager);
 
         initialize();
         populateStockPanel();

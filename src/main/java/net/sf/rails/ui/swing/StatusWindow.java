@@ -25,7 +25,7 @@ import rails.game.correct.CorrectionModeAction;
  * This is the Window used for displaying nearly all of the rails.game status.
  * This is also from where the ORWindow and StartRoundWindow are triggered.
  */
-public class StatusWindow extends JFrame implements ActionListener,
+public class StatusWindow extends RailsFrame implements ActionListener,
 KeyListener, ActionPerformer {
     private static final long serialVersionUID = 1L;
 
@@ -71,8 +71,6 @@ KeyListener, ActionPerformer {
     protected ActionButton passButton;
     protected ActionButton autopassButton;
 
-    protected GameUIManager gameUIManager;
-
     protected Round currentRound;
 
     protected PossibleActions possibleActions;
@@ -94,12 +92,9 @@ KeyListener, ActionPerformer {
     protected static Logger log =
             LoggerFactory.getLogger(StatusWindow.class);
 
-    //    GraphicsConfiguration graphicsConfiguration;
-
-    //    public StatusWindow(GraphicsConfiguration gc) {
-    //        super(gc);
-    //        this.graphicsConfiguration = gc;
-    //    }
+    public StatusWindow(GameUIManager gameUIManager) {
+        super(gameUIManager);
+    }
 
     public void initMenu() {
         menuBar = new JMenuBar();
@@ -274,12 +269,7 @@ KeyListener, ActionPerformer {
         }
     }
 
-    public StatusWindow() {
-
-    }
-
-    public void init(GameUIManager gameUIManager) {
-        this.gameUIManager = gameUIManager;
+    public void init() {
         this.possibleActions = gameUIManager.getGameManager().getPossibleActions();
 
         String gameStatusClassName = gameUIManager.getClassName(GuiDef.ClassName.GAME_STATUS);

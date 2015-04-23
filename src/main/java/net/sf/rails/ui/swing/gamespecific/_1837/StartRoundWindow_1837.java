@@ -5,6 +5,7 @@ import javax.swing.JDialog;
 import rails.game.action.PossibleAction;
 import rails.game.specific._1837.SetHomeHexLocation;
 import net.sf.rails.common.LocalText;
+import net.sf.rails.ui.swing.GameUIManager;
 import net.sf.rails.ui.swing.StartRoundWindow;
 import net.sf.rails.ui.swing.elements.NonModalDialog;
 import net.sf.rails.ui.swing.elements.RadioButtonDialog;
@@ -20,8 +21,8 @@ public class StartRoundWindow_1837 extends StartRoundWindow {
 
     private static final long serialVersionUID = 1L;
 
-    public StartRoundWindow_1837() {
-       
+    public StartRoundWindow_1837(GameUIManager gameUIManager) {
+        super(gameUIManager);
     }
    
     

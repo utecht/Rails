@@ -1,4 +1,3 @@
-/* $Header: /Users/blentz/rails_rcs/cvs/18xx/rails/ui/swing/gamespecific/_18EU/StatusWindow_18EU.java,v 1.6 2009/09/11 19:26:44 evos Exp $*/
 package net.sf.rails.ui.swing.gamespecific._18EU;
 
 import java.util.ArrayList;
@@ -9,11 +8,11 @@ import javax.swing.JOptionPane;
 
 import rails.game.action.DiscardTrain;
 import rails.game.action.PossibleAction;
-
 import net.sf.rails.common.LocalText;
 import net.sf.rails.game.PublicCompany;
 import net.sf.rails.game.Train;
 import net.sf.rails.game.specific._18EU.FinalMinorExchangeRound;
+import net.sf.rails.ui.swing.GameUIManager;
 import net.sf.rails.ui.swing.StatusWindow;
 
 import com.google.common.collect.Iterables;
@@ -27,6 +26,10 @@ public class StatusWindow_18EU extends StatusWindow {
 
     private static final long serialVersionUID = 1L;
 
+    public StatusWindow_18EU(GameUIManager gameUIManager) {
+        super(gameUIManager);
+     }
+    
     @Override
     protected boolean updateGameSpecificSettings() {
 

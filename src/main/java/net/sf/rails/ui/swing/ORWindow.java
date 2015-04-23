@@ -44,7 +44,7 @@ public class ORWindow extends DockingFrame implements ActionPerformer {
     protected Rectangle lastBounds;
 
     public ORWindow(GameUIManager gameUIManager,SplashWindow splashWindow) {
-        super( "yes".equals(Config.get("or.window.dockablePanels")) , splashWindow );
+        super(gameUIManager, "yes".equals(Config.get("or.window.dockablePanels")) , splashWindow );
         this.gameUIManager = gameUIManager;
 
         splashWindow.notifyOfStep(SplashWindow.STEP_OR_INIT_PANELS);
