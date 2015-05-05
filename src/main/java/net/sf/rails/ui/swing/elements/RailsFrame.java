@@ -1,6 +1,10 @@
 package net.sf.rails.ui.swing.elements;
 
+import java.awt.Rectangle;
+
 import javax.swing.JFrame;
+
+import com.google.gson.Gson;
 
 import net.sf.rails.ui.swing.GameUIManager;
 
@@ -16,8 +20,24 @@ public abstract class RailsFrame extends JFrame {
         this.gameUIManager = gameUIManager;
     }
     
+    
     public GameUIManager getGameUIManager() {
         return gameUIManager;
     }
-
+    
+    public void saveSettings(Gson gson) {
+        
+    }
+    
+    public void loadSettings(Gson gson) {
+        
+    }
+    
+    
+    
+    
+    protected static class Settings {
+        private Rectangle bounds;
+    }
+   
 }
