@@ -1405,7 +1405,6 @@ CompanyHasShares,CGR,20,5
 IS_NOW_PRES_OF,Marc,CGR
 START_MERGED_COMPANY,CGR,125,G1
 Floats,CGR
-CertificateLimit,18,4,9
 ExchangesBaseToken,CGR,CA,D17/1
 ExchangesBaseToken,CGR,WGB,J11/1
 ExchangesBaseToken,CGR,BBG,J15/1
@@ -1425,6 +1424,7 @@ Has,Marc,340
 Has,Pieter,52
 EndOfFormationRound,CGR,OperatingRound 7.1
 CannotOperate,CGR
+CertificateLimit,18,4,9
  
 CompanyOperates,CPR,Dave
 LaysTileAtFor,CPR,57,N3,SW,40

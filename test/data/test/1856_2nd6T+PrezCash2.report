@@ -913,7 +913,6 @@ CompanyHasShares,CGR,20,5
 IS_NOW_PRES_OF,Alice,CGR
 START_MERGED_COMPANY,CGR,110,F1
 Floats,CGR
-CertificateLimit,15,3,6
 ExchangesBaseToken,CGR,GT,P9/1
 ExchangesBaseToken,CGR,GW,F15/1
 ExchangesBaseToken,CGR,CV,N11/2
@@ -940,6 +939,7 @@ Has,Bob,80
 Has,Charlie,63
 EndOfFormationRound,CGR,OperatingRound 6.2
 CannotOperate,CGR
+CertificateLimit,15,3,6
  
 CompanyOperates,THB,Alice
 LaysTileAt,THB,25,K14,NE

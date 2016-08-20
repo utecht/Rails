@@ -1414,7 +1414,6 @@ HasMergedShares,POOL,5,2,CGR
 CompanyHasShares,CGR,10,10
 IS_NOW_PRES_OF,J1,CGR
 Floats,CGR
-CertificateLimit,28,3,11
 ExchangesBaseToken,CGR,CV,N11/2
 Has,GT,340
 Has,THB,60
@@ -1430,6 +1429,7 @@ Has,J2,3927
 Has,J3,2616
 EndOfFormationRound,CGR,OperatingRound 10.1
 CanOperate,CGR
+CertificateLimit,28,3,11
  
 CompanyOperates,CGR,J1
 LaysTileAt,CGR,14,M10,SW
