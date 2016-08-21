@@ -22,6 +22,7 @@ public class OperatingRound extends Round implements Observer {
 
     /* Transient memory (per round only) */
     protected EnumState<GameDef.OrStep> stepObject;
+    protected EnumState<GameDef.OrStep> interruptedStep = new EnumState<GameDef.OrStep>("InterruptedORStep", GameDef.OrStep.INITIAL);
 
     protected boolean actionPossible = true;
 
@@ -61,7 +62,7 @@ public class OperatingRound extends Round implements Observer {
     protected PossibleAction selectedAction = null;
 
     protected PossibleAction savedAction = null;
-
+    
     public static final int SPLIT_ROUND_DOWN = 2; // More to the treasury
 
     //      protected static GameDef.OrStep[] steps =
@@ -799,6 +800,18 @@ public class OperatingRound extends Round implements Observer {
         }
 
     }
+    
+    protected void interruptStep(GameDef.OrStep interruptingStep) {
+        interruptedStep.set(stepObject.value());
+        stepObject.set(interruptingStep);
+    }
+    
+    protected void resumeInterruptedStep() {
+        if (interruptedStep != null) {
+            stepObject.set(interruptedStep.value());
+            interruptedStep = null;
+        }
+    }
 
     /*=======================================
      *  3.  COMMON ACTIONS (not bound to steps)
@@ -911,7 +924,7 @@ public class OperatingRound extends Round implements Observer {
         if (!checkForExcessTrains()) {
             // Trains may have been discarded by other players
             setCurrentPlayer (operatingCompany.get().getPresident());
-            stepObject.set(GameDef.OrStep.BUY_TRAIN);
+            resumeInterruptedStep();
         }
 
         //setPossibleActions();
@@ -2853,7 +2866,7 @@ public class OperatingRound extends Round implements Observer {
 
         // Check if any companies must discard trains
         if (getCurrentPhase() != previousPhase && checkForExcessTrains()) {
-            stepObject.set(GameDef.OrStep.DISCARD_TRAINS);
+            interruptStep(GameDef.OrStep.DISCARD_TRAINS);
         }
 
         if (trainManager.hasPhaseChanged()) newPhaseChecks();
