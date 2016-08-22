@@ -223,8 +223,6 @@ public class OperatingRound_18EU extends OperatingRound {
     @Override
     public boolean checkForExcessTrains() {
 
-        excessTrainCompanies = new HashMap<Player, List<PublicCompanyI>>();
-        Player player;
         TrainI pullmann;
         Portfolio portfolio;
         int numberOfTrains;
@@ -243,19 +241,9 @@ public class OperatingRound_18EU extends OperatingRound {
                 pullmann.moveTo(pool);
                 numberOfTrains--;
             }
-
-            // If we are still above the limit, make the list
-            // of trains to select the discarded one from
-            if (numberOfTrains > comp.getCurrentTrainLimit()) {
-                player = comp.getPresident();
-                if (!excessTrainCompanies.containsKey(player)) {
-                    excessTrainCompanies.put(player,
-                            new ArrayList<PublicCompanyI>(2));
-                }
-                excessTrainCompanies.get(player).add(comp);
-            }
         }
-        return !excessTrainCompanies.isEmpty();
+        
+        return super.checkForExcessTrains();
     }
 
     private boolean hasPullmann () {
