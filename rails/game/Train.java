@@ -43,6 +43,7 @@ public class Train implements TrainI {
     public void setType (TrainType type) {
         previousType = this.type.get();
         this.type.set(type);
+        log.debug("Train "+uniqueId+" type set from "+previousType+" to "+type );
     }
 
     /**

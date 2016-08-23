@@ -153,6 +153,10 @@ public class TrainCertificateType {
     public boolean isAvailable() {
         return available.booleanValue();
     }
+    
+    public boolean isDual() {
+        return potentialTrainTypes.size() == 2;
+    }
 
     /**
      * Make a train type available for buying by public companies.
@@ -168,7 +172,7 @@ public class TrainCertificateType {
     public boolean hasRusted() {
         return rusted.booleanValue();
     }
-
+    
     /**
      * @return Returns the name.
      */

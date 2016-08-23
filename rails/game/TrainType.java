@@ -32,6 +32,11 @@ public class TrainType implements Cloneable {
     protected int cost;
     protected int majorStops;
     protected int minorStops;
+    
+    /** A dual train whose certificate can be 'flipped' to the train on the 'reverse' side.
+     *  A flip attempt has no effect on non-dual trains.
+     */
+    protected boolean flippable = false;
 
     protected int lastIndex = 0;
 
@@ -90,6 +95,13 @@ public class TrainType implements Cloneable {
             // Are towns counted (only relevant is reachBasis = "stops")
             scoreCities =
                 scoreTag.getAttributeAsString("scoreCities", scoreCities);
+        }
+        
+        // Another type into which this type can be swapped 
+        // (used for 'flippable' dual trains)
+        Tag swapTag = tag.getChild("Flippable");
+        if (swapTag != null) {
+            flippable = true;
         }
 
         // Check the reach and score values
@@ -178,6 +190,14 @@ public class TrainType implements Cloneable {
      */
     public int getTownScoreFactor() {
         return townScoreFactor;
+    }
+    
+    protected boolean isFlippable() {
+        return flippable;
+    }
+    
+    protected boolean isDual() {
+        return certificateType.isDual();
     }
 
     @Override

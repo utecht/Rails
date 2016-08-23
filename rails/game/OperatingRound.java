@@ -2824,7 +2824,10 @@ public class OperatingRound extends Round implements Observer {
                     stb.getOriginalCompany().getName() ));
         }
 
-        train.setType(action.getType()); // Needed for dual trains bought from the Bank
+        if (action.getType().isDual() && oldHolder == ipo) {
+            //train.setType(action.getType()); // Needed for dual trains bought from the Bank
+            trainManager.updateTrainType(train, action.getType());
+        }
 
         operatingCompany.get().buyTrain(train, price);
 

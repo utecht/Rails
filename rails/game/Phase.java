@@ -67,6 +67,10 @@ public class Phase implements PhaseI {
     protected List<TrainCertificateType> releasedTrains;
     String releasedTrainNames;
 
+    /** Dual train types to flip (turned upside down) if a phase gets activated */
+    protected List<TrainType> flippedTrains;
+    String flippedTrainNames;
+
     /** Actions for this phase.
      * When this phase is activated, the GameManager method phaseAction() will be called,
      * which in turn will call the current Round, which is responsible to handle the action.
@@ -205,6 +209,7 @@ public class Phase implements PhaseI {
             trainLimitStep = trainsTag.getAttributeAsInteger("limitStep", trainLimitStep);
             rustedTrainNames = trainsTag.getAttributeAsString("rusted", null);
             releasedTrainNames = trainsTag.getAttributeAsString("released", null);
+            flippedTrainNames = trainsTag.getAttributeAsString("flip", null);
             trainTradingAllowed =
                 trainsTag.getAttributeAsBoolean("tradingAllowed",
                         trainTradingAllowed);
@@ -257,28 +262,43 @@ public class Phase implements PhaseI {
 
         this.gameManager = gameManager;
         TrainManager trainManager = gameManager.getTrainManager();
-        TrainCertificateType type;
+        TrainCertificateType trainCertType;
+        TrainType trainType;
 
         if (rustedTrainNames != null) {
             rustedTrains = new ArrayList<TrainCertificateType>(2);
             for (String typeName : rustedTrainNames.split(",")) {
-                type = trainManager.getCertTypeByName(typeName);
-                if (type == null) {
+                trainCertType = trainManager.getCertTypeByName(typeName);
+                if (trainCertType == null) {
                     throw new ConfigurationException (" Unknown rusted train type '"+typeName+"' for phase '"+name+"'");
                 }
-                rustedTrains.add(type);
-                type.setPermanent(false);
+                rustedTrains.add(trainCertType);
+                trainCertType.setPermanent(false);
             }
         }
 
         if (releasedTrainNames != null) {
             releasedTrains = new ArrayList<TrainCertificateType>(2);
             for (String typeName : releasedTrainNames.split(",")) {
-                type = trainManager.getCertTypeByName(typeName);
-                if (type == null) {
+                trainCertType = trainManager.getCertTypeByName(typeName);
+                if (trainCertType == null) {
                     throw new ConfigurationException (" Unknown released train type '"+typeName+"' for phase '"+name+"'");
                 }
-                releasedTrains.add(type);
+                releasedTrains.add(trainCertType);
+            }
+        }
+
+        if (flippedTrainNames != null) {
+            flippedTrains = new ArrayList<TrainType>(2);
+            for (String typeName : flippedTrainNames.split(",")) {
+                trainType = trainManager.getTypeByName(typeName);
+                if (trainType == null) {
+                    throw new ConfigurationException (" Unknown flipped train type '"+typeName+"' for phase '"+name+"'");
+                }
+                if (!trainType.isDual() || !trainType.isFlippable()) {
+                    throw new ConfigurationException (" Train type '"+typeName+"' is not flippable for phase '"+name+"'");
+                }
+                flippedTrains.add(trainType);
             }
         }
 
@@ -317,6 +337,12 @@ public class Phase implements PhaseI {
         if (releasedTrains != null && !releasedTrains.isEmpty()) {
             for (TrainCertificateType type : releasedTrains) {
                 trainManager.makeTrainAvailable(type);
+            }
+        }
+
+        if (flippedTrains != null && !flippedTrains.isEmpty()) {
+            for (TrainType type : flippedTrains) {
+                trainManager.flipDualTrainCertificates(type);
             }
         }
 
@@ -428,6 +454,10 @@ public class Phase implements PhaseI {
 
     public List<TrainCertificateType> getReleasedTrains() {
         return releasedTrains;
+    }
+
+    public List<TrainType> getFlippedTrains() {
+        return flippedTrains;
     }
 
     /**
