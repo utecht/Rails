@@ -468,7 +468,14 @@ public class Portfolio implements TokenHolder, MoveableHolder {
     /** Low-level method, only to be called by Move objects */
     private void removeTrain(TrainI train) {
         trains.remove(train);
-        trainsPerType.get(train.getPreviousType()).remove(train);
+        // The below ifs are both needed for undo-safety 
+        // (the type may have changed before or after)
+        if (trainsPerType.get(train.getPreviousType()) != null) {
+            trainsPerType.get(train.getPreviousType()).remove(train);
+        }
+        if (trainsPerType.get(train.getType()) != null) {
+            trainsPerType.get(train.getType()).remove(train);
+        }
         trainsPerCertType.get(train.getCertType()).remove(train);
         train.setHolder(null);
         trainsModel.update();

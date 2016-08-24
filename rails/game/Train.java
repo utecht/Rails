@@ -43,7 +43,7 @@ public class Train implements TrainI {
     public void setType (TrainType type) {
         previousType = this.type.get();
         this.type.set(type);
-        log.debug("Train "+uniqueId+" type set from "+previousType+" to "+type );
+        log.debug("Train type set from "+previousType+" to "+type+": "+this);
     }
 
     /**
@@ -140,6 +140,18 @@ public class Train implements TrainI {
      * Move the train to another Portfolio.
      */
     public void setHolder(Portfolio newHolder) {
+        
+        if (newHolder == holder) return;
+        
+        // Make sure that undoing a dual train type change updates the portfolio train model.
+        if (getCertType().isDual()) {
+            if (holder != null) {
+                type.removeDependent(holder.getTrainsModel());
+            }
+            if (newHolder != null) {
+                type.addDependent(newHolder.getTrainsModel());
+            }
+        }
         holder = newHolder;
     }
 
@@ -177,7 +189,7 @@ public class Train implements TrainI {
         StringBuilder b = new StringBuilder(uniqueId);
         b.append(" certType=").append(getCertType());
         b.append(" type=").append(getType());
-        b.append(" holder=").append(holder.getName());
+        b.append(" holder=").append(holder==null?"null":holder.getName());
         return b.toString();
     }
 
