@@ -40,7 +40,7 @@ public class Stop extends RailsAbstractItem implements RailsOwner, Comparable<St
     private final HashSetState<Integer> previousNumbers = 
             HashSetState.create(this, "previousNumbers");
 
-    private Stop(MapHex hex, String id, Station station) {
+    protected Stop(MapHex hex, String id, Station station) {
         super(hex, id);
         relatedStation.set(station);
         tokens.addModel(hex);
@@ -188,6 +188,8 @@ public class Stop extends RailsAbstractItem implements RailsOwner, Comparable<St
 
     public boolean isRunThroughAllowedFor (PublicCompany company) {
         switch (getRunThroughAllowed()) {
+        case ALLWAYS: //tokens are irrelevant
+            return true;
         case YES: // either it has no tokens at all, or it has a company tokens or empty token slots
             return !hasTokens() || hasTokenOf (company) || hasTokenSlotsLeft() ;
         case NO:

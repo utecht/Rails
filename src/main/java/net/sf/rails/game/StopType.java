@@ -19,6 +19,7 @@ public class StopType {
      */
 
     public static enum RunThrough {
+        ALLWAYS,
         YES,
         NO,
         TOKENONLY
