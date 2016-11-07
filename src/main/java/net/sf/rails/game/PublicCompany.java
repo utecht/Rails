@@ -60,6 +60,7 @@ public class PublicCompany extends RailsAbstractItem implements Company, RailsMo
     // Base token lay cost calculation methods
     public static final String BASE_COST_SEQUENCE = "sequence";
     public static final String BASE_COST_DISTANCE = "distance";
+    public static final String BASE_COST_PHASE = "phase";
 
     protected static final String[] tokenLayTimeNames =
         new String[] { "whenStarted", "whenFloated", "firstOR" };
@@ -516,6 +517,8 @@ public class PublicCompany extends RailsAbstractItem implements Company, RailsMo
                     baseTokenLayCostMethod = BASE_COST_SEQUENCE;
                 } else if (baseTokenLayCostMethod.equalsIgnoreCase(BASE_COST_DISTANCE)) {
                     baseTokenLayCostMethod = BASE_COST_DISTANCE;
+                } else if (baseTokenLayCostMethod.equalsIgnoreCase(BASE_COST_PHASE)) {
+                    baseTokenLayCostMethod = BASE_COST_PHASE;
                 } else {
                     throw new ConfigurationException(
                             "Invalid base token lay cost calculation method: "
@@ -1613,14 +1616,14 @@ public class PublicCompany extends RailsAbstractItem implements Company, RailsMo
         if (cost > 0) tokensCostThisTurn.change(cost);
     }
 
-    public void layBaseTokennNoMapMode(int cost) {
+    public void layBaseTokenInNoMapMode(int cost) {
         if (cost > 0) tokensCostThisTurn.change(cost);
         tokensLaidThisTurn.append(Bank.format(this, cost), ",");
     }
 
     /**
      * Calculate the cost of laying a token, given the hex where
-     * the token is laid. This only makes a difference for de "distance" method.
+     * the token is laid. This only makes a difference for the "distance" method.
      * @param hex The hex where the token is to be laid.
      * @return The cost of laying that token.
      */
@@ -1644,6 +1647,15 @@ public class PublicCompany extends RailsAbstractItem implements Company, RailsMo
                 // WARNING: no provision yet for multiple home hexes.
                 return getRoot().getMapManager().getHexDistance(homeHexes.get(0), hex) * baseTokenLayCost.get(0);
             }
+        } else  if (baseTokenLayCostMethod.equals(BASE_COST_PHASE)) {
+            int phase = getRoot().getGameManager().getCurrentPhase().getIndex();
+
+            if (phase >= baseTokenLayCost.size()) {
+                phase = baseTokenLayCost.size() - 1;
+            } else if (phase < 0) {
+                phase = 0;
+            }
+            return baseTokenLayCost.get(phase);
         } else {
             return 0;
         }
@@ -1654,7 +1666,7 @@ public class PublicCompany extends RailsAbstractItem implements Company, RailsMo
      */
     public Set<Integer> getBaseTokenLayCosts () {
 
-        if (baseTokenLayCostMethod.equals(BASE_COST_SEQUENCE)) {
+        if ((baseTokenLayCostMethod.equals(BASE_COST_SEQUENCE))||(baseTokenLayCostMethod.equals(BASE_COST_PHASE))) {
             return ImmutableSet.of(getBaseTokenLayCost(null));
         } else if (baseTokenLayCostMethod.equals(BASE_COST_DISTANCE)) {
             // WARNING: no provision yet for multiple home hexes.

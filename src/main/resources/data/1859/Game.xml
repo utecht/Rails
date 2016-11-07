@@ -64,9 +64,6 @@
 		</TrainType>
 		<TrainType name="3" majorStops="3" cost="180" quantity="5">
 			<NewPhase phaseName="3"/>
-			<IfOption name="Variant" value="Wabash">
-				<Attributes quantity="6"/>
-			</IfOption>
 		</TrainType>
 		<TrainType name="4" majorStops="4" cost="300" quantity="4">
             <NewPhase phaseName="4"/>

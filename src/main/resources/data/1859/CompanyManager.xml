@@ -15,166 +15,84 @@
 		<BaseTokens>
 			<!-- HomeBase lay options: "whenStarted", "whenFloated", "firstOR" (default) -->
 			<HomeBase lay="firstOR"/>
-			<LayCost method="phase" cost="0,40,100"/>
+			<LayCost method="phase" cost="40,70,100"/>
 		</BaseTokens>
 		<Certificate type="President" shares="2"/>
 		<Certificate shares="1" number="8"/>
 		<Trains limit="4,3,2"/>
         <CanUseSpecialProperties/>
-        <IfOption name="Variant" value="Coalfields,Coalfields&amp;Reading">
-			<CanUseSpecialProperties/>
-			<SpecialProperties>
-				<SpecialProperty condition="ifOwnedByCompany" when="orTurn" class="net.sf.rails.game.special.SpecialRight">
-					<SpecialRight name="Coalfields" cost="140" location="L10"/>
-				</SpecialProperty>
-			</SpecialProperties>
-        </IfOption>
-	</CompanyType>
-	<Company name="SVNRR" type="Private" basePrice="20" revenue="5"
-			longname="Schuylkill Valley Navigation &amp; Railroad Company">
-		<Blocking hex="G15"/>
+ 	</CompanyType>
+	<Company name="CTDC" type="Private" basePrice="20" revenue="5"
+			longname="Cape Town Dock Company">
 	</Company>
-	<Company name="C&amp;StL" type="Private" basePrice="40" revenue="10"
-			longname="Champlain &amp; St.Lawrence">
-		<Blocking hex="B20"/>
+	<Company name="GPCC" type="Private" basePrice="40" revenue="10"
+			longname="George Pauling Construction Company">
 		<SpecialProperties>
 			<SpecialProperty condition="ifOwnedByCompany" when="tileLayingStep" class="net.sf.rails.game.special.SpecialTileLay">
-				<SpecialTileLay colour="yellow" location="B20" extra="yes" free="yes"/>
+				<SpecialTileLay colour="yellow" extra="yes" free="yes"/>
 			</SpecialProperty>
 		</SpecialProperties>
+		<Closing condition="ifexercised"/>
 	</Company>
-	<Company name="D&amp;H" type="Private" basePrice="70" revenue="15"
-		longname="Delaware &amp; Hudson">
-		<Blocking hex="F16"/>
+	<Company name="MRC" type="Private" basePrice="70" revenue="15"
+		longname="Military Railroad Commission">
 		<SpecialProperties>
 			<SpecialProperty condition="ifOwnedByCompany" when="tileLayingStep" class="net.sf.rails.game.special.SpecialTileLay">
-				<SpecialTileLay location="F16" extra="no" free="no" tile="57" />
-			</SpecialProperty>
-			<SpecialProperty condition="ifOwnedByCompany" when="tokenLayingStep" class="net.sf.rails.game.special.SpecialBaseTokenLay">
-				<SpecialBaseTokenLay location="F16" extra="no" free="yes" requiresTile = "yes"/>
+				<SpecialTileLay extra="yes" free="no" />
 			</SpecialProperty>
 		</SpecialProperties>
+		<Closing condition="ifexercised"/>
 	</Company>
-	<Company name="M&amp;H" type="Private" basePrice="110" revenue="20"
-		longname="Mohawk &amp; Hudson">
-		<Blocking hex="D18"/>
-		<SpecialProperties>
-			<SpecialProperty condition="ifOwnedByPlayer" when="anyTurn" class="net.sf.rails.game.special.ExchangeForShare">
-				<ExchangeForShare company="NYC" share="10"/>
-			</SpecialProperty>
-		</SpecialProperties>
+	<Company name="KDMC" type="Private" basePrice="110" revenue="20"
+		longname="Kimberley Diamond Mine Corporation">
+		<PreventClosing condition="doesNotClose"/>
 	</Company>
-	<Company name="C&amp;A" type="Private" basePrice="160" revenue="25"
-		longname="Camden &amp; Amboy">
-		<Info key="ComesWithCertificate" parm="PRR,10"/>
-		<Blocking hex="H18"/>
+	<Company name="JGMC" type="Private" basePrice="160" revenue="25"
+		longname="Johannesberg Gold Mining Contract">
+		<PreventClosing condition="doesNotClose"/>
 	</Company>
-	<Company name="B&amp;O" type="Private" basePrice="220" revenue="30"
-		longname="Baltimore &amp; Ohio">
+	<Company name="CTR" type="Private" basePrice="220" revenue="30"
+		longname="Cape Town Railway">
 		<Info key="ComesWithPresidency" parm="B&amp;O,20"/>
-		<Blocking hex="I13,I15"/>
 		<Tradeable toCompany="no"/>
 	</Company>
 	
 	<!-- Note two supported colour specification formats:
 	     RGB decimal with commas and RGB hexadecimal without commas -->
-	<Company name="B&amp;M" type="Public" tokens="2" fgColour="000000" bgColour="60E060"
-			longname="Boston &amp; Maine">
+	<Company name="WR" type="Public" tokens="2" fgColour="000000" bgColour="60E060"
+			longname="Wynberg Railway">
 		<Home hex="E23"/>
 	</Company>	     
-	<Company name="B&amp;O" type="Public" tokens="3" fgColour="255,255,255" bgColour="0,0,255"
-			longname="Baltimore &amp; Ohio">
-		<FirstTrainCloses type="Private" name="B&amp;O"/>
+	<Company name="CT" type="Public" tokens="3" fgColour="255,255,255" bgColour="0,0,255"
+			longname="Cape Town Railway">
+		<FirstTrainCloses type="Private" name="CTR"/>
 		<Home hex="I15"/>
 	</Company>
-	<Company name="C&amp;O" type="Public" tokens="3" fgColour="000000" bgColour="A0E0FF"
-			longname="Chesapeake &amp; Ohio">
-		<IfOption name="Variant" value="Basegame,Pere Marquette,Reading,Simple,Wabash">
+	<Company name="PE" type="Public" tokens="3" fgColour="000000" bgColour="A0E0FF"
+			longname="Port Elizabeth &amp; Uitenhage Railway">
 			<Home hex="F6"/>
-		</IfOption>
-		<IfOption name="Variant" value="Coalfields,Coalfields&amp;Reading">
-			<Home hex="K13"/>
-		</IfOption>
 	</Company>
-	<Company name="CPR" type="Public" tokens="4" fgColour="FFFFFF" bgColour="FF0000"
-			longname="Canadian Pacific Railroad">
+	<Company name="CM" type="Public" tokens="4" fgColour="FFFFFF" bgColour="FF0000"
+			longname="Cape Midland Railway">
 		<Home hex="A19"/>
 	</Company>
-	<Company name="Erie" type="Public" tokens="3" fgColour="000000" bgColour="FFFF00"
-			longname="Erie Railroad">
-	<!--	city = 0 implies that this is not yet decided (OO-tiles), blocks means that 
-			in each city one slot has to be available -->
-		<Home hex="E11" city="0"/>
+	<Company name="DR" type="Public" tokens="3" fgColour="000000" bgColour="FFFF00"
+			longname="Durban Railway">
+		<Home hex="E11" />
 	</Company>
-    <IfOption name="Variant" value="Simple">
-        <Company name="L&amp;N" type="Public" tokens="3" fgColour="FFE600" bgColour="FF0000"
-                longname="Louisville &amp; Nashville">
-            <Home hex="H4"/>
-        </Company>
-    </IfOption>
-    <IfOption name="Variant" value="Simple">
-        <Company name="MILW" type="Public" tokens="3" fgColour="FFFFFF" bgColour="FF8000"
-                longname="Milwaukee Road">
-            <Home hex="D2"/>
-        </Company>
-    </IfOption>
-    <IfOption name="Variant" value="Coalfields,Coalfields&amp;Reading">
-        <Company name="N&amp;W" type="Public" tokens="3" fgColour="FFFF00" bgColour="000080"
-                longname="Norfolk &amp; Western">
-            <Home hex="L16"/>
-        </Company>
-    </IfOption>
-	<Company name="NYC" type="Public" tokens="4" fgColour="FFFFFF" bgColour="000000"
-			longname="New York Central">
+   	<Company name="NS" type="Public" tokens="4" fgColour="FFFFFF" bgColour="000000"
+			longname="Netherlands Cout Africa Railway">
 		<Home hex="E19"/>
 	</Company>
-	<Company name="NYNH" type="Public" tokens="2" fgColour="000000" bgColour="FF8000"
-			longname="New York, New Haven &amp; Hartford">
-		<Home hex="G19" city="2"/>
-	</Company>
-	<IfOption name="Variant" value="Pere Marquette">
-		<Company name="PM" type="Public" tokens="3" fgColour="FFFF00" bgColour="000080"
-				longname="Pere Marquette">
-			<Home hex="E5" city="0"/>
-		</Company>
-	</IfOption>
-	<Company name="PRR" type="Public" tokens="4" fgColour="FFFFFF" bgColour="008000"
-			longname="Pennsylvania Railroad">
-		<Home hex="H12"/>
-	</Company>
-    <IfOption name="Variant" value="Reading,Coalfields&amp;Reading">
-        <Company name="RDG" type="Public" tokens="2" fgColour="000000" bgColour="C8F526"
-                longname="Reading Railroad">
-            <Home hex="H14"/>
-			<Certificate type="President" shares="3"/>
-			<Certificate shares="1" number="7"/>
-        </Company>
-    </IfOption>
-    <IfOption name="Variant" value="Wabash">
-        <Company name="WAB" type="Public" tokens="2" fgColour="000000" bgColour="FFFFFF"
-                longname="Wabash Railroad">
-            <Home hex="H2"/>
-            <Certificate type="President" shares="2"/>
-            <Certificate shares="1" number="8"/>
-        </Company>
-    </IfOption>
-	
 	<StartPacket roundClass="net.sf.rails.game.StartRound_1830">
 		<Bidding initial="5" minimum="5" increment="1"/>
-		<Item name="SVNRR" type="Private" basePrice="20"/>
-		<Item name="C&amp;StL" type="Private" basePrice="40"/>
-		<Item name="D&amp;H" type="Private" basePrice="70"/>
-		<Item name="M&amp;H" type="Private" basePrice="110"/>
-		<Item name="C&amp;A" type="Private" basePrice="160">
-    <IfOption name="C&amp;ACertificate(ReadingOnly)" value="PRR">
-			<SubItem name="PRR" type="Public" />
-	</IfOption>
-    <IfOption name="C&amp;ACertificate(ReadingOnly)" value="RDG">
-    		<SubItem name="RDG" type="Public" />
-    </IfOption>
-		</Item>
-		<Item name="B&amp;O" type="Private" basePrice="220">
-			<SubItem name="B&amp;O" type="Public" president="yes"/>
+		<Item name="CTTDC" type="Private" basePrice="20"/>
+		<Item name="GPCC" type="Private" basePrice="40"/>
+		<Item name="MRC" type="Private" basePrice="70"/>
+		<Item name="KDMC" type="Private" basePrice="110"/>
+		<Item name="JGMC" type="Private" basePrice="160"/>
+    	<Item name="CTR" type="Private" basePrice="220">
+			<SubItem name="CT" type="Public" president="yes"/>
 		</Item>
 	</StartPacket>
 </CompanyManager>

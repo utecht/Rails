@@ -30,7 +30,6 @@
 	<StockSpace name="B6" price="34" type="orange"/>
 	<StockSpace name="B7" price="27" type="brown"/>
 	<StockSpace name="B8" price="20" type="brown"/>
-	<StockSpace name="B9" price="10" type="brown"/>
 	<StockSpace name="C1" price="71" />
 	<StockSpace name="C2" price="66" />
 	<StockSpace name="C3" price="60" type="yellow"/>
@@ -39,8 +38,6 @@
 	<StockSpace name="C6" price="42" type="orange"/>
 	<StockSpace name="C7" price="36" type="orange"/>
 	<StockSpace name="C8" price="30" type="brown"/>
-	<StockSpace name="C9" price="20" type="brown"/>
-	<StockSpace name="C10" price="10" type="brown"/>
 	<StockSpace name="D1" price="76" />
 	<StockSpace name="D2" price="70" />
 	<StockSpace name="D3" price="65" />
@@ -49,9 +46,6 @@
 	<StockSpace name="D6" price="50" type="yellow"/>
 	<StockSpace name="D7" price="45" type="orange"/>
 	<StockSpace name="D8" price="40" type="orange"/>
-	<StockSpace name="D9" price="30" type="brown"/>
-	<StockSpace name="D10" price="20" type="brown"/>
-	<StockSpace name="D11" price="10" type="brown"/>
 	<StockSpace name="E1" price="82" />
 	<StockSpace name="E2" price="76" />
 	<StockSpace name="E3" price="70" />
@@ -60,9 +54,6 @@
 	<StockSpace name="E6" price="58" type="yellow"/>
 	<StockSpace name="E7" price="54" type="yellow"/>
 	<StockSpace name="E8" price="50" type="yellow"/>
-	<StockSpace name="E9" price="40" type="orange"/>
-	<StockSpace name="E10" price="30" type="brown"/>
-	<StockSpace name="E11" price="20" type="brown"/>
 	<StockSpace name="F1" price="90" />
 	<StockSpace name="F2" price="82" />
 	<StockSpace name="F3" price="76" />
@@ -71,9 +62,6 @@
 	<StockSpace name="F6" price="65" />
 	<StockSpace name="F7" price="63" />
 	<StockSpace name="F8" price="60" type="yellow"/>
-	<StockSpace name="F9" price="50" type="yellow"/>
-	<StockSpace name="F10" price="40" type="orange"/>
-	<StockSpace name="F11" price="30" type="brown"/>
 	<StockSpace name="G1" price="100" >
 		<StartSpace/>
 	</StockSpace>
@@ -94,9 +82,6 @@
 	</StockSpace>
 	<StockSpace name="G7" price="67" />
 	<StockSpace name="G8" price="67" />
-	<StockSpace name="G9" price="60" type="yellow"/>
-	<StockSpace name="G10" price="50" type="yellow"/>
-	<StockSpace name="G11" price="40" type="orange"/>
 	<StockSpace name="H1" price="112" />
 	<StockSpace name="H2" price="100" />
 	<StockSpace name="H3" price="90" />
