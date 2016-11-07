@@ -2650,7 +2650,7 @@ public class OperatingRound extends Round implements Observer {
                 // FIXME: Check where to lay the base tokens in NoMapMode
                 // (bank.getUnavailable().addBonusToken(token));
             }
-            operatingCompany.value().layBaseTokennNoMapMode(amount);
+            operatingCompany.value().layBaseTokenInNoMapMode(amount);
             ReportBuffer.add(this, LocalText.getText("OCLayBaseTokenExecuted",
                     operatingCompany.value().getId(), cashText));
         }
