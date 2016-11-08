@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.91pre3 r13670"
+   sodipodi:docname="tile59167.svg">
+  <metadata
+     id="metadata32">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs30" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1318"
+     inkscape:window-height="918"
+     id="namedview28"
+     showgrid="false"
+     inkscape:zoom="2.1085044"
+     inkscape:cx="196"
+     inkscape:cy="-70"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <path
+     d=" M 98,0 L 294,0 L 392,170 L 294,340 L 98,340 L 0,170 Z"
+     fill="#38AC00"
+     stroke="#38AC00"
+     stroke-width="1"
+     stroke-linejoin="round"
+     id="path4" />
+  <circle
+     cx="196"
+     cy="170"
+     r="51"
+     fill="#FFFFFF"
+     stroke="#FFFFFF"
+     stroke-width="12"
+     id="circle8" />
+  <path
+     d="M 196,170 L 343,255"
+     fill="none"
+     stroke="#FFFFFF"
+     stroke-width="34"
+     stroke-linecap="butt"
+     stroke-linejoin="round"
+     id="path10" />
+  <path
+     d="M 196,170 L 49,85"
+     fill="none"
+     stroke="#FFFFFF"
+     stroke-width="34"
+     stroke-linecap="butt"
+     stroke-linejoin="round"
+     id="path12" />
+  <path
+     d="M 196,170 L 343,255"
+     fill="none"
+     stroke="#000000"
+     stroke-width="26"
+     stroke-linecap="butt"
+     stroke-linejoin="round"
+     id="path14" />
+  <path
+     d="M 196,170 L 49,85"
+     fill="none"
+     stroke="#000000"
+     stroke-width="26"
+     stroke-linecap="butt"
+     stroke-linejoin="round"
+     id="path16" />
+  <circle
+     cx="196"
+     cy="170"
+     r="51"
+     fill="#FFFFFF"
+     stroke="#000000"
+     stroke-width="4"
+     id="circle18" />
+  <ellipse
+     rx="31"
+     ry="30"
+     cx="122.05146"
+     cy="33.514603"
+     id="ellipse20"
+     style="fill:#ffffff;stroke:#000000;stroke-width:2;stroke-linejoin:round" />
+  <text
+     x="122.52573"
+     y="45.845619"
+     dy="0"
+     font-size="43"
+     id="text22"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;stroke:#000000"
+     sodipodi:linespacing="125%">
+    <tspan
+       sodipodi:role="line"
+       id="tspan4160"
+       x="122.52573"
+       y="45.845619">30</tspan>
+  </text>
+  <text
+     x="49"
+     y="170"
+     dy="0.3em"
+     fill="#000000"
+     stroke="#000000"
+     text-anchor="middle"
+     font-family="TimpaniHeavy"
+     font-size="54"
+     id="text24"
+     style="-inkscape-font-specification:'TimpaniHeavy, Normal';font-family:TimpaniHeavy;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:54.00000095px;text-anchor:middle;text-align:center;writing-mode:lr;line-height:125%;"
+     sodipodi:linespacing="125%">
+    <tspan
+       sodipodi:role="line"
+       id="tspan4162">B</tspan>
+  </text>
+  <path
+     d=" M 98,0 L 294,0 L 392,170 L 294,340 L 98,340 L 0,170 Z"
+     fill="none"
+     stroke="black"
+     stroke-width="1"
+     stroke-linejoin="round"
+     id="path26" />
+</svg>

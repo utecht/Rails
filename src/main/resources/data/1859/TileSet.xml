@@ -29,15 +29,10 @@
 	<Tile id="-20" relayBaseTokens="yes"><!-- 2 OO cities -->
 		<Upgrade id="59"/>
 	</Tile>
-	<Tile id="-21"><!-- New York -->
-		<Upgrade id="54"/>
+	<Tile id="-59054"><!-- Pretoria Johannesburg -->
+		<Upgrade id="62"/>
 	</Tile>
 	<Tile id="-58"/>
-	<Tile id="-101"/><!-- Altoona -->
-	<Tile id="-102"/><!-- Rochester -->
-	<Tile id="-103"/><!-- Montreal -->
-	<Tile id="-104"/><!-- Norfolk -->
-	<Tile id="-105"/><!-- Cleveland -->
 	<Tile id="-901"/>
 	<Tile id="-902"/>
 	<Tile id="-903"/>
@@ -112,9 +107,6 @@
 	</Tile>
 		<Tile id="53" quantity="2">
 			<Upgrade id="61" />
-	</Tile>
-	<Tile id="54" quantity="1">
-			<Upgrade id="62" />
 	</Tile>
 	<Tile id="59" quantity="2">
 		<Upgrade id="64,65,66,67,68" />
