@@ -4,20 +4,19 @@
 		<Access type="city" runTo="yes" runThrough="allways" loop="yes" score="major"/>
 		<Access type="town" runTo="yes" runThrough="yes" loop="yes" score="minor"/>
 	</Defaults>
-	<Hex name="A15" tile="-901" orientation="5" value="20,30" city="Cape Town Port"/>
-	<Hex name="A17" tile="-901" orientation="4" value="20,30" city="Cape Town Port"/>
+	<Hex name="A15" tile="-901" orientation="0" value="20,30" city="Cape Town Port"/>
+	<Hex name="A17" tile="-901" orientation="5" value="20,30" city="Cape Town Port"/>
 	<Hex name="B10" tile="0" cost="120"/>
 	<Hex name="B12" tile="0"/>
-	<Hex name="B14" tile="-10"/>
-	<Hex name="B16" tile="-26007" orientation="1" city="Cape Town"/>
-	<Hex name="B18" tile="-901" orientation="3" value="20,30" city="Cape Town Port"/>
+	<Hex name="B14" tile="-1"/>
+	<Hex name="B16" tile="-26007" orientation="2" city="Cape Town"/>
+	<Hex name="B18" tile="-901" orientation="4" value="20,30" city="Cape Town Port"/>
 	<Hex name="C9" tile="0"/>
 	<Hex name="C11" tile="0" cost="120"/>
 	<Hex name="C13" tile="0" cost="80"/>
 	<Hex name="C15" tile="0" />
-	<Hex name="C17" tile="0"/>
-	<Hex name="C19" tile="-10"/>
-	<Hex name="D8" tile="-901" orientation="4" value="10,30" city="South West Africa"/>
+	<Hex name="C17" tile="-1"/>
+	<Hex name="D8" tile="-901" orientation="1" value="10,30" city="South West Africa"/>
 	<Hex name="D10" tile="0"/>
 	<Hex name="D12" tile="0" cost="120"/>
 	<Hex name="D14" tile="0" cost="40"/>
@@ -25,10 +24,9 @@
 	<Hex name="E7" tile="0"/>
 	<Hex name="E9" tile="0"/>
 	<Hex name="E11" tile="0"/>
-	<Hex name="E13" tile="0"/>
-	<Hex name="E15" tile="0" cost="40"/>
-	<Hex name="E17" tile="0" cost="120"/>
-	<Hex name="E19" tile="0" cost="80"/>
+	<Hex name="E13" tile="0" cost="40"/>
+	<Hex name="E15" tile="0" cost="120"/>
+	<Hex name="E17" tile="0" cost="80"/>
 	<Hex name="F6" tile="0" cost="40"/>
 	<Hex name="F8" tile="0" cost="40"/>
 	<Hex name="F10" tile="0"/>
@@ -39,60 +37,62 @@
 	<Hex name="G5" tile="0"/>
 	<Hex name="G7" tile="-11" city="Kimberley" label="B"/>
 	<Hex name="G9" tile="0"/>
-	<Hex name="G11" tile="0" label="De Aar"/>
+	<Hex name="G11" tile="-60" label="De Aar"/>
 	<Hex name="G13" tile="0"/>
 	<Hex name="G15" tile="0" cost="120"/>
 	<Hex name="G17" tile="-10" city="Port Elizabeth"/>
-	<Hex name="G19" tile="-901" orientation="0" city="Port" value="10,20"/>
+	<Hex name="G19" tile="-901" orientation="4" city="Port" value="10,20"/>
 	<Hex name="H4" tile="-59012" city="Mafeking"/>
 	<Hex name="H6" tile="0"/>
 	<Hex name="H8" tile="0"/>
-	<Hex name="H10" tile="0" cost="40"/>
-    <Hex name="H12" tile="0" cost="120"/>
+	<Hex name="H10" tile="0"/>
+    <Hex name="H12" tile="0" cost="40"/>
+    <Hex name="H14" tile="0" cost="120"/>
     <Hex name="H16" tile="0" cost="120"/>
-	<Hex name="H18" tile="-901" orientation="1" value="10,20"/>
-	<Hex name="I3" tile="0" impassible="I5, J4"/>
-	<Hex name="I5" tile="-20"  label="OO" cost="80" impassible="I3" />
+	<Hex name="H18" tile="-901" orientation="3" value="10,20"/>
+	<Hex name="I3" tile="0" impassable="I5,J4"/>
+	<Hex name="I5" tile="-20" label="OO" impassable="I3" />
 	<Hex name="I7" tile="0"/>
 	<Hex name="I9" tile="-59167" label="B" orientation="5" city="Bloomfontein"/>
 	<Hex name="I11" tile="0" cost="80"/>
 	<Hex name="I13" tile="0" cost="40"/>
 	<Hex name="I15" tile="-1"/>
-    <Hex name="J2" tile="0" impassible="K3, J4"/>
-	<Hex name="J4" tile="0" impassible="J2"/>
+    <Hex name="J2" tile="0" impassable="K3, J4"/>
+	<Hex name="J4" tile="0" impassable="I3"/>
 	<Hex name="J6" tile="0"/>
 	<Hex name="J8" tile="0"/>
-	<Hex name="J10" tile="-901" orientation="1"/>
+	<Hex name="J10" tile="-901" orientation="3"/>
 	<Hex name="J12" tile="0" cost="80"/>
 	<Hex name="J14" tile="-10" city="East London"/>
-	<Hex name="J16" tile="-901" orientation="0" value="10,20"/>
-	<Hex name="K1" tile="-901" orientation="2" value="20,60"/>
-	<Hex name="K3" tile="-59054" orientation="5" city="Pretoria, Johannesberg" label="NY"/>
+	<Hex name="J16" tile="-901" orientation="4" value="10,20"/>
+	<Hex name="K1" tile="-901" orientation="2" value="20,60" City="Rhodesia"/>
+	<Hex name="K3" tile="-59054" orientation="0" city="Pretoria, Johannesberg" label="NY" impassible="J2"/>
 	<Hex name="K5" tile="-2"/>
 	<Hex name="K7" tile="-20" label="OO" city="Arlington,Bethlehem"/>
-	<Hex name="K9" tile="-901" orientation="4" value="0,10"/>
+	<Hex name="K9" tile="-901" orientation="4" value="0,10" city="Basutoland"/>
 	<Hex name="K11" tile="0" cost="120"/>
 	<Hex name="K13" tile="-1"/>
-	<Hex name="L0" tile="-503" orientation="4"/>
+	<Hex name="L0" tile="-503" orientation="5"/>
 	<Hex name="L2" tile="0"/>
 	<Hex name="L4" tile="0"/>
 	<Hex name="L6" tile="0"/>
 	<Hex name="L8" tile="0" cost="80"/>
     <Hex name="L10" tile="-10" cost="40"/>
     <Hex name="L12" tile="0" cost="120"/>
-	<Hex name="M1" tile="10" city="Zoekmakar"/>
+	<Hex name="M1" tile="-10" city="Zoekmakar"/>
     <Hex name="M3" tile="0" cost="40"/>
     <Hex name="M5" tile="-901" orientation="5" value="0,10" city="Swaziland"/>
     <Hex name="M7" tile="0" cost="80" impassable="N6"/>
     <Hex name="M9" tile="0" cost="80" />
-    <Hex name="M11" tile="-901" orientation="0" value="10,20" city="Port"/>
-	<Hex name="N0" tile="-503" orientation="4"/>
+    <Hex name="M11" tile="-10" city="Durban"/>
+    <Hex name="M13" tile="-901" orientation="4" value="10,20" city="Port"/>
+	<Hex name="N0" tile="-503" orientation="1"/>
 	<Hex name="N2" tile="0"/>
 	<Hex name="N4" tile="-10"/>
 	<Hex name="N6" tile="0" cost="120" impassable="N8,M7"/>
 	<Hex name="N8" tile="0"/>
-    <Hex name="N10" tile="-901" orientation="1" value="10,20"/>
-    <Hex name="N12" tile="-901" orientation="2" value="10,20"/>
-    <Hex name="O3" tile="-901" orientation="1" value="10,20"/>
-    <Hex name="O5" tile="-901" orientation="2" value="10,20"/>
+    <Hex name="N10" tile="-901" orientation="2" value="10,20"/>
+    <Hex name="N12" tile="-901" orientation="3" value="10,20"/>
+    <Hex name="O3" tile="-901" orientation="2" value="10,20"/>
+    <Hex name="O5" tile="-901" orientation="3" value="10,20"/>
 </Map>

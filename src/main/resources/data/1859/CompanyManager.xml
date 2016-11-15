@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <CompanyManager>
 	<CompanyType name="Private" class="net.sf.rails.game.PrivateCompany">
-		<ClosingConditions>
-            <Phase>5</Phase>
-		</ClosingConditions>
 		<Tradeable toCompany="yes" lowerPriceFactor="0.5" upperPriceFactor="2.0"/>
 		<Tradeable toPlayer="yes"/>	
-		<CanUseSpecialProperties/>
 	</CompanyType>
 	<CompanyType name="Public" class="net.sf.rails.game.PublicCompany">
 		<CanBuyPrivates/>
@@ -23,57 +19,54 @@
 		<Trains limit="4,3,2"/>
         <CanUseSpecialProperties/>
  	</CompanyType>
-	<Company name="CTDC" type="Private" basePrice="20" revenue="5"
-			longname="Cape Town Dock Company">
+	<Company name="CTDC" longname="Cape Town Dock Company" type="Private" basePrice="20" revenue="5">
+			<ClosingConditions>
+            <Phase>5</Phase>
+            </ClosingConditions>
 	</Company>
-	<Company name="GPCC" longname="George Pauling Construction Company" type="Private" basePrice="40" revenue="10" 
-			>
-		<!-- <SpecialProperties>
+	<Company name="GPCC" longname="George Pauling Construction Company" type="Private" basePrice="40" revenue="10">
+		<SpecialProperties>
 			<SpecialProperty condition="ifOwnedByCompany" when="tileLayingStep" class="net.sf.rails.game.special.SpecialTileLay">
-				<SpecialTileLay colour="yellow" extra="yes" free="yes"/>
+				<SpecialTileLay colour="yellow" location="B10,B12,B14,C9,C11,C13,C15,C17,D10,D12,D14,D16,E7,E9,E11,E13,E15,E17,F6,F8,F10,F12,F14,F16,F18,G5,G9,G13,G15,G17,H6,H8,H10,H12,H14,H16,I3,I7,I11,I13,I15,J2,J4,J6,J8,J12,J14,K5,K11,K13,L2,L4,L6,L8,L10,L12,M1,M3,M7,M9,M11,N2,N4,N6,N8" extra="yes" free="yes"/>
 			</SpecialProperty>
 		</SpecialProperties>
 		<ClosingConditions>
-		<Phase>5</Phase>
+            <Phase>5</Phase>
 			<SpecialProperties condition="ifExercised"/>
-		</ClosingConditions> -->
+		</ClosingConditions>
 	</Company>
-	<Company name="MRC" type="Private" basePrice="70" revenue="15"
-		longname="Military Railroad Commission">
-	<!-- 	<SpecialProperties>
+	<Company name="MRC" longname="Military Railroad Commission" type="Private" basePrice="70" revenue="15">
+<!-- 		<SpecialProperties>
 			<SpecialProperty condition="ifOwnedByCompany" when="tileLayingStep" class="net.sf.rails.game.special.SpecialTileLay">
 				<SpecialTileLay extra="yes" free="no" />
 			</SpecialProperty>
 		</SpecialProperties>
-		<ClosingConditions>
-		<Phase>5</Phase>
+				<ClosingConditions>
+            <Phase>5</Phase>
 			<SpecialProperties condition="ifExercised"/>
 		</ClosingConditions> -->
 	</Company>
-	<Company name="KDMC" type="Private" basePrice="110" revenue="20"
-		longname="Kimberley Diamond Mine Corporation">
+	<Company name="KDMC" longname="Kimberley Diamond Mine Corporation" type="Private" basePrice="110" revenue="20">
 		<PreventClosing condition="doesNotClose"/>
 	</Company>
-	<Company name="JGMC" type="Private" basePrice="160" revenue="25"
-		longname="Johannesberg Gold Mining Contract">
+	<Company name="JGMC" longname="Johannesberg Gold Mining Contract" type="Private" basePrice="160" revenue="25">
 		<PreventClosing condition="doesNotClose"/>
 	</Company>
-	<Company name="CTR" type="Private" basePrice="220" revenue="30"
-		longname="Cape Town Railway">
+	<Company name="CTR" longname="Cape Town Railway" type="Private" basePrice="220" revenue="30">
 		<Info key="ComesWithPresidency" parm="B&amp;O,20"/>
 		<Tradeable toCompany="no"/>
 	</Company>
 	
 	<!-- Note two supported colour specification formats:
 	     RGB decimal with commas and RGB hexadecimal without commas -->
-	<Company name="WR" type="Public" tokens="2" fgColour="000000" bgColour="60E060"
-			longname="Wynberg Railway">
-		<Home hex="B16"/>
+	<Company name="WR" longname="Wynberg Railway" type="Public" tokens="2" fgColour="000000" bgColour="60E060"
+			>
+		<Home hex="B16" slot="0"/>
 	</Company>	     
 	<Company name="CT" type="Public" tokens="3" fgColour="255,255,255" bgColour="0,0,255"
 			longname="Cape Town Railway">
 		<FirstTrainCloses type="Private" name="CTR"/>
-		<Home hex="B16"/>
+		<Home hex="B16" slot="1"/>
 	</Company>
 	<Company name="PE" type="Public" tokens="3" fgColour="000000" bgColour="A0E0FF"
 			longname="Port Elizabeth &amp; Uitenhage Railway">
@@ -93,7 +86,7 @@
 	</Company>
 	<StartPacket roundClass="net.sf.rails.game.StartRound_1830">
 		<Bidding initial="5" minimum="5" increment="1"/>
-		<Item name="CTTDC" type="Private" basePrice="20"/>
+		<Item name="CTDC" type="Private" basePrice="20"/>
 		<Item name="GPCC" type="Private" basePrice="40"/>
 		<Item name="MRC" type="Private" basePrice="70"/>
 		<Item name="KDMC" type="Private" basePrice="110"/>
