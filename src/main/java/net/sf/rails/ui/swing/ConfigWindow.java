@@ -247,7 +247,7 @@ class ConfigWindow extends JFrame {
                 allowedValues = GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getAvailableFontFamilyNames(); 
             } else {
-                allowedValues = (String[])item.allowedValues.toArray();
+                allowedValues = item.allowedValues.toArray(new String[0]);
             }
             final JComboBox<String> comboBox = new JComboBox<String>(allowedValues);
             comboBox.setSelectedItem(configValue);
